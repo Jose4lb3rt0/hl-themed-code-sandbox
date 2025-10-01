@@ -1,4 +1,5 @@
 function startValveIntro() {
+    document.body.classList.add('intro-active')
     const overlay = document.getElementById('valve-intro-overlay')
     const bg = document.getElementById('valve-bg')
     const logo = document.getElementById('valve-logo')
@@ -24,12 +25,14 @@ function startValveIntro() {
 
         setTimeout(() => {
             overlay.remove()
+            document.body.classList.remove('intro-active')
         }, 10000)
     }
 
     document.addEventListener('keydown', (e) => {
         if ((e.key === 'Escape') && overlay) {
             overlay.remove()
+            document.body.classList.remove('intro-active')
             audio.pause()
         }
     })
