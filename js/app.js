@@ -91,35 +91,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 })
 
+                const outputFrame = document.getElementById('output-frame')
+
+                const updateOutput = () => {
+                    const html = window.htmlEditor.getValue()
+                    const css = window.cssEditor.getValue()
+                    const js = window.jsEditor.getValue()
+
+                    outputFrame.srcdoc = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                        <style>${css}</style>
+                        </head>
+                        <body>
+                            ${html}
+                            <script>
+                                try {
+                                    ${js}
+                                } catch(e) {
+                                 document.body.innerHTML += "<pre style='color:red'>" + e + "</pre>"
+                                }
+                            </script>
+                        </body>
+                        </html>
+                    `
+                }
+
+                Object.values(editors).forEach(editor => {
+                    editor.onDidChangeModelContent(() => {
+                        updateOutput()
+                    })
+                })
+
+                updateOutput()
             })
-
-        const runBtn = document.getElementById('runBtn')
-        const outputFrame = document.getElementById('output-frame')
-
-        runBtn.addEventListener('click', () => {
-            const html = window.htmlEditor.getValue()
-            const css = window.cssEditor.getValue()
-            const js = window.jsEditor.getValue()
-
-            outputFrame.srcdoc = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <style>${css}</style>
-                </head>
-                <body>
-                    ${html}
-                    <script>
-                        try {
-                            ${js}
-                        } catch(e) {
-                            document.body.innerHTML += "<pre style='color:red'>" + e + "</pre>"
-                        }
-                    </script>
-                </body>
-                </html>
-            `
-        })
     })
 })
 

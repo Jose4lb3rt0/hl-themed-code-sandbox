@@ -26,49 +26,57 @@
         <img src="assets/images/half-life-logo.png" alt="Half-Life Logo" class="hl-logo fg-logo">
     </header>
 
-    <main class="editor-container">
-        <div class="editor">
-            <label for="html-code">
-                <img src="assets/icons/html.svg" alt="HTML Logo" class="lang-logo">
-                HTML
-            </label>
-            <div class="command-console-container">
-                <div id="html-editor" class="monaco-editor"></div>
-                <button class="scroll-btn scroll-up" data-editor="html">▲</button>
-                <button class="scroll-btn scroll-down" data-editor="html">▼</button>
+    <main class="">
+        <div class="editor-container">
+            <div class="editor">
+                <label for="html-code">
+                    <img src="assets/icons/html.svg" alt="HTML Logo" class="lang-logo">
+                    HTML
+                </label>
+                <div class="command-console-container">
+                    <div id="html-editor" class="monaco-editor"></div>
+                    <button class="scroll-btn scroll-up" data-editor="html">▲</button>
+                    <button class="scroll-btn scroll-down" data-editor="html">▼</button>
+                </div>
             </div>
-        </div>
 
-        <div class="editor">
-            <label for="css-editor">
-                <img src="assets/icons/css.svg" alt="CSS Logo" class="lang-logo">
-                CSS
-            </label>
-            <div class="command-console-container">
-                <div id="css-editor" class="monaco-editor"></div>
-                <button class="scroll-btn scroll-up" data-editor="css">▲</button>
-                <button class="scroll-btn scroll-down" data-editor="css">▼</button>
+            <div class="editor">
+                <label for="css-editor">
+                    <img src="assets/icons/css.svg" alt="CSS Logo" class="lang-logo">
+                    CSS
+                </label>
+                <div class="command-console-container">
+                    <div id="css-editor" class="monaco-editor"></div>
+                    <button class="scroll-btn scroll-up" data-editor="css">▲</button>
+                    <button class="scroll-btn scroll-down" data-editor="css">▼</button>
+                </div>
             </div>
-        </div>
 
-        <div class="editor">
-            <label for="js-editor">
-                <img src="assets/icons/javascript.svg" alt="JavaScript Logo" class="lang-logo">
-                JavaScript
-            </label>
-            <div class="command-console-container">
-                <div id="js-editor" class="monaco-editor"></div>
-                <button class="scroll-btn scroll-up" data-editor="js">▲</button>
-                <button class="scroll-btn scroll-down" data-editor="js">▼</button>
+            <div class="editor">
+                <label for="js-editor">
+                    <img src="assets/icons/javascript.svg" alt="JavaScript Logo" class="lang-logo">
+                    JavaScript
+                </label>
+                <div class="command-console-container">
+                    <div id="js-editor" class="monaco-editor"></div>
+                    <button class="scroll-btn scroll-up" data-editor="js">▲</button>
+                    <button class="scroll-btn scroll-down" data-editor="js">▼</button>
+                </div>
             </div>
-        </div>
 
-        <div class="output-editor">
-            <label for="output-frame">Output</label>
-            <iframe id="output-frame" sandbox="allow-scripts"></iframe>
-        </div>
+            <!-- <div class="output-editor"> -->
+            <div class="editor">
+                <label for="output-frame">
+                    <img src="assets/icons/steam.svg" alt="Steam Logo" class="lang-logo">
+                    Output
+                </label>
+                <div class="command-console-container">
+                    <iframe id="output-frame" sandbox="allow-scripts"></iframe>
+                </div>
+            </div>
 
-        <button id="runBtn">Run Code</button>
+            <!-- <button id="runBtn">Run Code</button> -->
+        </div>
     </main>
 
     <script src="js/intro.js"></script>
