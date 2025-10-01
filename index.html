@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/intro.css">
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.53.0/min/vs/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-themes/dist/monaco-themes.js"></script>
 </head>
 
 <body>
@@ -27,18 +28,39 @@
 
     <main class="editor-container">
         <div class="editor">
-            <label for="html-code">HTML</label>
-            <div id="html-editor" class="monaco-editor"></div>
+            <label for="html-code">
+                <img src="assets/icons/html.svg" alt="HTML Logo" class="lang-logo">
+                HTML
+            </label>
+            <div class="command-console-container">
+                <div id="html-editor" class="monaco-editor"></div>
+                <button class="scroll-btn scroll-up" data-editor="html">▲</button>
+                <button class="scroll-btn scroll-down" data-editor="html">▼</button>
+            </div>
         </div>
 
         <div class="editor">
-            <label for="css-editor">CSS</label>
-            <div id="css-editor" class="monaco-editor"></div>
+            <label for="css-editor">
+                <img src="assets/icons/css.svg" alt="CSS Logo" class="lang-logo">
+                CSS
+            </label>
+            <div class="command-console-container">
+                <div id="css-editor" class="monaco-editor"></div>
+                <button class="scroll-btn scroll-up" data-editor="css">▲</button>
+                <button class="scroll-btn scroll-down" data-editor="css">▼</button>
+            </div>
         </div>
 
         <div class="editor">
-            <label for="js-editor">JavaScript</label>
-            <div id="js-editor" class="monaco-editor"></div>
+            <label for="js-editor">
+                <img src="assets/icons/javascript.svg" alt="JavaScript Logo" class="lang-logo">
+                JavaScript
+            </label>
+            <div class="command-console-container">
+                <div id="js-editor" class="monaco-editor"></div>
+                <button class="scroll-btn scroll-up" data-editor="js">▲</button>
+                <button class="scroll-btn scroll-down" data-editor="js">▼</button>
+            </div>
         </div>
 
         <div class="output-editor">

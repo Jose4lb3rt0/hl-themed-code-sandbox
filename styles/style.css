@@ -1,50 +1,64 @@
 /* Fuentes */
 @font-face {
     font-family: 'TrebuchetCustom';
-    src: url('assets/fonts/trebuc.ttf') format('truetype');
+    src: url('/assets/fonts/trebuc.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'TrebuchetCustomItalic';
-    src: url('assets/fonts/Trebuchet-MS-Italic.ttf') format('truetype');
+    src: url('/assets/fonts/Trebuchet-MS-Italic.ttf') format('truetype');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'Verdana';
-    src: url('assets/fonts/Verdana.ttf') format('truetype');
+    src: url('/assets/fonts/Verdana.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Verdana-Bold';
-    src: url('assets/fonts/Verdana-Bold.ttf') format('truetype');
+    src: url('/assets/fonts/Verdana-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: bold;
 }
 
 @font-face {
     font-family: 'Verdana-BoldItalic';
-    src: url('assets/fonts/Verdana-BoldItalic.ttf') format('truetype');
+    src: url('/assets/fonts/Verdana-BoldItalic.ttf') format('truetype');
     font-weight: bold;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'Verdana-Italic';
-    src: url('assets/fonts/Verdana-Italic.ttf') format('truetype');
+    src: url('/assets/fonts/Verdana-Italic.ttf') format('truetype');
     font-weight: normal;
     font-style: italic;
+}
+
+@font-face {
+    font-family: 'ProggyClean';
+    src: url('/assets/fonts/ProggyClean.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ProggyClean';
+    src: url('/assets/fonts/ProggyClean.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
 }
 
 /***********/
 
 body {
-    font-family: 'TrebuchetCustom', 'Courier New', monospace;
+    font-family: 'TrebuchetCustom', monospace;
     background-image: url("/assets/images/background.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -67,7 +81,7 @@ header {
 }
 
 label {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0rem;
     font-weight: bold;
 }
 
@@ -102,9 +116,28 @@ button#runBtn:hover {
     display: flex;
     flex-direction: column;
     height: 220px;
-    border: 2px solid #ff6f00;
+    border-top: 1px solid #889180;
+    border-left: 1px solid #889180;
+    border-right: 1px solid #282e22;
+    border-bottom: 1px solid #282e22;
     box-sizing: border-box;
-    background: #181818;
+    background: #4c5844;
+}
+
+.editor label {
+    all: unset;
+    padding: 0.4rem 0.4rem;
+    background: #4c5844;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'ProggyClean', monospace !important;
+    font-size: large;
+}
+
+.lang-logo {
+    width: 15px;
+    height: 15px;
 }
 
 .editor,
@@ -120,13 +153,66 @@ button#runBtn:hover {
     background-color: #000;
 }
 
+.command-console-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
 
 .monaco-editor {
-    height: 100%;
-    min-width: 0;
-    max-width: 100%;
+    /* Esto quedó a la perfección, bello */
+    height: 95%;
+    min-width: 95%;
+    max-width: 95%;
     box-sizing: border-box;
     background: transparent;
+    border-bottom: 1px solid #889180;
+    border-right: 1px solid #889180;
+    border-left: 1px solid #282e22;
+    border-top: 1px solid #282e22;
+    z-index: 0;
+    /* margin: 0.5rem 0.5rem 0.5rem 0.5rem; Espacio entre el borde y el editor */
+}
+
+.scroll-btn {
+    box-sizing: border-box;
+    position: absolute;
+    right: 2.5%;
+    width: 15px;
+    height: 15px;
+
+    background: #4c5844;
+    font-size: 9px;
+    color: #b0aeae;
+    border-top: 1px solid #889180;
+    border-left: 1px solid #889180;
+    border-right: 1px solid #282e22;
+    border-bottom: 1px solid #282e22;
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 0;
+}
+
+.scroll-btn:active {
+    border-bottom: 1px solid #889180;
+    border-right: 1px solid #889180;
+    border-left: 1px solid #282e22;
+    border-top: 1px solid #282e22;
+}
+
+.scroll-btn.scroll-up {
+    top: 0px;
+}
+
+.scroll-btn.scroll-down {
+    bottom: 5%;
 }
 
 @keyframes instantBlur {
