@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.53.0/min/vs' } })
     require(['vs/editor/editor.main'], function () {
-        fetch('../assets/monaco/steam-classic.json')
+        fetch('../libs/steam-classic.json')
             .then(res => res.json())
             .then(themeJson => {
                 const monacoTheme = vscodeThemeToMonaco(themeJson)
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     automaticLayout: true,
                     minimap: { enabled: false },
                     theme: 'steamClassic',
-                    lineNumbers: 'off' // Poner de vuelta si se quiere los numeros otra vez
+                    lineNumbers: 'off'
                 })
 
                 window.cssEditor = monaco.editor.create(document.getElementById('css-editor'), {
@@ -151,7 +151,3 @@ function vscodeThemeToMonaco(themeJson) {
         colors: themeJson.colors || {}
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    startValveIntro()
-})

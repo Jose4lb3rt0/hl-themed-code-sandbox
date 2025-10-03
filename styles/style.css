@@ -57,18 +57,67 @@
 
 /***********/
 
+html,
 body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
     font-family: 'TrebuchetCustom', monospace;
     background-image: url("/assets/images/background.jpeg");
+    /* background: blue; */
     background-repeat: no-repeat;
     background-size: cover;
     color: #f0f0f0;
-    margin: 0;
-    padding: 0;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.phase {
+    display: block;
+}
+
+.phase.hidden {
+    display: none;
+}
+
+#phase-1 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* background: #c03c3c; */
+    justify-content: flex-end;
+    padding: 0 11% 1% 11%;
+    box-sizing: border-box;
+}
+
+.main-menu {
+    /* background: #831f83; */
+    width: 100%;
+    height: 50%;
+    margin: 0 0 4% 0;
+    box-sizing: border-box;
+}
+
+.menu-table {
+    /* background: violet; */
 }
 
 header {
@@ -79,6 +128,40 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+
+.menu-table td {
+    padding: 8px;
+}
+
+.menu-table td:first-child {
+    width: 30vh;
+}
+
+.option {
+    font-size: larger;
+    font-weight: 700;
+    color: #efae00;
+    text-shadow: 0 1px 1px #0000007c;
+    cursor: pointer;
+    transition: color 0s, text-shadow 0s;
+}
+
+.option:hover {
+    color: #fff443;
+    text-shadow: 0px 0px 7px #fff443;
+    transition: none;
+}
+
+.option:not(:hover) {
+    transition: color 0.2s ease-in, text-shadow 0.8s ease-out;
+}
+
+.desc {
+    font-size: large;
+    color: #686868;
+    text-shadow: 0 1px 1px #0000007c;
 }
 
 label {
@@ -188,13 +271,8 @@ button#runBtn:hover {
     width: 15px;
     height: 15px;
 
-    background: #4c5844;
     font-size: 9px;
     color: #b0aeae;
-    border-top: 1px solid #889180;
-    border-left: 1px solid #889180;
-    border-right: 1px solid #282e22;
-    border-bottom: 1px solid #282e22;
     line-height: 1;
 
     display: flex;
@@ -205,11 +283,32 @@ button#runBtn:hover {
     margin: 0;
 }
 
-.scroll-btn:active {
+button {
+    font-family: 'ProggyClean', monospace !important;
+    font-size: large;
+    padding: 6px 6px;
+    color: #ffffff;
+    background: #4c5844;
+    border-top: 1px solid #889180;
+    border-left: 1px solid #889180;
+    border-right: 1px solid #282e22;
+    border-bottom: 1px solid #282e22;
+
+    /* Por si se le añaden iconos */
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+button:active {
     border-bottom: 1px solid #889180;
     border-right: 1px solid #889180;
     border-left: 1px solid #282e22;
     border-top: 1px solid #282e22;
+}
+
+.vital-menu-button {
+    padding-inline-end: 20px;
 }
 
 .scroll-btn.scroll-up {
@@ -430,4 +529,94 @@ button#runBtn:hover {
     animation:
         instantBlur 2s steps(1, end) infinite,
         moveLogoFG 30s linear infinite;
+}
+
+.floating-menu {
+    position: absolute;
+    width: 300px;
+    color: white;
+    z-index: 9999;
+
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #889180;
+    border-left: 1px solid #889180;
+    border-right: 1px solid #282e22;
+    border-bottom: 1px solid #282e22;
+    background: #4c5844;
+    box-sizing: border-box;
+
+    font-family: 'ProggyClean', monospace !important;
+    font-size: larger;
+}
+
+.floating-menu.hidden {
+    display: none;
+}
+
+.menu-header {
+    all: unset;
+    padding: 0.5rem 0.5rem;
+    background: #4c5844;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-header span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.close-menu {
+    padding: 0px 0px;
+
+    width: 18px;
+    height: 18px;
+    color: #b0aeae;
+
+    font-size: 15px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.menu-content {
+    padding: 5% 13%;
+    display: flex;
+    flex-direction: column;
+}
+
+.contentBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#loading-bar .menu-content {
+    padding: 2% 5% 5% 5%;
+}
+
+#loading-bar.floating-menu {
+    width: 380px;
+}
+
+.bar-block {
+    flex: 0 0 12px;
+    height: 100%;
+    background: transparent;
+    /* transition: background 0.3s; */
+}
+
+.bar-block.active {
+    background: #c5b550;
 }

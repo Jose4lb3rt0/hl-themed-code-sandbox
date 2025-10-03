@@ -13,39 +13,13 @@
 </head>
 
 <body>
-    <div id="valve-intro-overlay">
-        <div id="black-screen"></div>
-        <div id="valve-intro-content">
-            <img id="valve-bg" src="assets/images/valve_intro.png" alt="Valve Background">
-            <img id="valve-logo" src="assets/images/valve_logo.svg" alt="Valve Logo">
-        </div>
-        <audio id="valve-intro-audio" src="assets/sounds/valve_intro.mp3"></audio>
-    </div>
-
     <header>
         <img src="assets/images/half-life-logo.png" alt="Half-Life Logo" class="hl-logo bg-logo">
         <img src="assets/images/half-life-logo.png" alt="Half-Life Logo" class="hl-logo fg-logo">
     </header>
 
     <main>
-        <section class="phase" id="phase-1">
-            <div class="logo-container">
-            </div>
-            <div class="main-menu">
-                <table class="menu-table">
-                    <tr>
-                        <td class="option" data-menu="new">New code</td>
-                        <td class="desc">Create a new code file</td>
-                    </tr>
-                    <tr>
-                        <td class="option" data-menu="load">Load code</td>
-                        <td class="desc">Load an existing code file</td>
-                    </tr>
-                </table>
-            </div>
-        </section>
-
-        <section class="phase hidden" id="phase-2">
+        <section class="phase" id="phase-2">
             <div class="editor-container">
                 <div class="editor">
                     <label for="html-code">
@@ -83,7 +57,6 @@
                     </div>
                 </div>
 
-                <!-- <div class="output-editor"> -->
                 <div class="editor">
                     <label for="output-frame">
                         <img src="assets/icons/steam.svg" alt="Steam Logo" class="lang-logo">
@@ -93,8 +66,6 @@
                         <iframe id="output-frame" sandbox="allow-scripts"></iframe>
                     </div>
                 </div>
-
-                <!-- <button id="runBtn">Run Code</button> -->
             </div>
         </section>
     </main>
@@ -103,15 +74,8 @@
     <script>
         console.log("Howler disponible?", typeof Howl);
     </script>
-    <script src="js/loading.js"></script>
-    <script src="js/intro.js"></script>
+    <script src="js/editor.js"></script>
     <script src="js/menus.js"></script>
-    <script src="js/app.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            startValveIntro()
-        })
-    </script>
 </body>
 
 </html>
