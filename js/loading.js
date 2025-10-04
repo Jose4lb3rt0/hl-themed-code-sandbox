@@ -16,15 +16,15 @@ function showLoadingBar(nextPage, description) {
     }
 
     let progress = 0
-    const interval = setInterval(() => {
-
+    window.loadingInterval = setInterval(() => {
         if (progress < totalBlocks) {
             blocks[progress].classList.add("active")
             progress++
 
             loadingText.textContent = description ? description : "Loading..." + Math.round((progress / totalBlocks) * 100) + "%"
         } else {
-            clearInterval(interval)
+            clearInterval(window.loadingInterval)
+            window.loadingInterval = null
             setTimeout(() => {
                 window.location.href = nextPage
             }, 100)

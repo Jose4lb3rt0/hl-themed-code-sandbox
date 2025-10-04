@@ -68,11 +68,17 @@ function createMenu(menuData) {
     menu.style.transform = "translate(-50%, -50%)"
     menu.style.zIndex = ++zIndexCounter
 
-    menu.innerHTML = `
+    let headerHTML = `
         <div class="menu-header">
             <span><img src="assets/icons/steam.svg" class="lang-logo">${menuData.title}</span>
-            <button class="close-menu">✖</button>
-        </div>
+    `
+    if (menuData.id !== "loading-bar") {
+        headerHTML += `<button class="close-menu">✖</button>`
+    }
+    headerHTML += `</div>`
+
+    menu.innerHTML = `
+        ${headerHTML}
         <div class="menu-content">${menuData.content}</div>
     `
 
@@ -84,10 +90,22 @@ function createMenu(menuData) {
         menu.style.zIndex = zIndexCounter
     })
 
-    menu.querySelector(".close-menu").addEventListener('click', () => {
-        menu.remove()
-        openMenus = openMenus.filter(m => m !== menu)
-    })
+    if (menuData.id !== "loading-bar") {
+        menu.querySelector(".close-menu").addEventListener('click', () => {
+            closeMenu(menu)
+        })
+    }
+
+    const cancelBtn = menu.querySelector(".vital-menu-button")
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+            closeMenu(menu)
+            if (menuData.id === "loading-bar" && window.loadingInterval) {
+                clearInterval(window.loadingInterval)
+                window.loadingInterval = null
+            }
+        })
+    }
 
     let isDragging = false
     let offsetX, offsetY
@@ -121,4 +139,9 @@ function newCode(mode) {
         default:
             break
     }
+}
+
+function closeMenu(menu) {
+    menu.remove()
+    openMenus = openMenus.filter(m => m !== menu)
 }
