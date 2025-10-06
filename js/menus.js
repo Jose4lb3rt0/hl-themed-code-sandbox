@@ -5,6 +5,7 @@ const menus = {
     new: {
         id: "menu-new",
         title: "New Code",
+        resizable: false,
         content: `
             <button class="contentBtn" onclick="newCode('html-css-js')">HTML + CSS + JavaScript</button>
             <button class="contentBtn vital-menu-button" style="margin-top: 7%; align-self: end;">Cancel</button>
@@ -13,6 +14,7 @@ const menus = {
     load: {
         id: "menu-load",
         title: "Load Code",
+        resizable: false,
         content: `
             <span>Cargar un archivo existente:</span>
             <button class="contentBtn">Subir archivo</button>
@@ -22,23 +24,24 @@ const menus = {
     loading: {
         id: "loading-bar",
         title: "Loading...",
+        resizable: false,
         content: `
-            <div style="width: 100; display: flex; flex-direction: column; gap: 0.5rem">
-                <span id="loading-text" style="color: #a0ab95;"></span>
-                <div style="width: 100; display: flex; gap: 0.5rem; align-items: center;">
-                    <div id="bar-bg" style="width:100%; background: #3e4737; overflow:hidden; height: 28px; padding: 4px; box-sizing: border-box; display: flex; gap: 2px;">
-                        <div id="progress-bar" style="width:0%; height:100%; background:#0f0; transition:width 0.3s;"></div>
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 0.5rem">
+                <span id="loading-text" style="color: #a0ab95"></span>
+                <div style="width: 100%; display: flex; gap: 0.5rem; align-items: center">
+                    <div id="bar-bg" style="width:100%; background: #3e4737; overflow:hidden; height: 28px; padding: 4px; box-sizing: border-box; display: flex; gap: 2px">
+                        <div id="progress-bar" style="width:0%; height:100%; background:#0f0; transition:width 0.3s"></div>
                     </div>
-                    <button class="contentBtn vital-menu-button" style="align-self: end;">Cancel</button>
+                    <button class="contentBtn vital-menu-button" style="align-self: end">Cancel</button>
                 </div>
             </div>
         `,
-    }
+    },
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     //OPCIONES DEL MENÚ PRINCIPAL
-    document.querySelectorAll(".option").forEach(option => {
+    document.querySelectorAll(".option").forEach((option) => {
         option.addEventListener("click", () => {
             const menuType = option.dataset.menu
             const menuData = menus[menuType]
@@ -65,7 +68,7 @@ function createMenu(menuData) {
     menu.style.position = "absolute"
     menu.style.top = "50%"
     menu.style.left = "50%"
-    menu.style.transform = "translate(-50%, -50%)"
+    menu.style.transform = "translate(-50%, -50%)" //centrar en la pantalla, abajo se definen coordenadas post-creación para el estiramiento resizable
     menu.style.zIndex = ++zIndexCounter
 
     let headerHTML = `
@@ -82,8 +85,35 @@ function createMenu(menuData) {
         <div class="menu-content">${menuData.content}</div>
     `
 
+    if (menuData.resizable) {
+        const sides = [
+            "top",
+            "right",
+            "bottom",
+            "left",
+            "top-right",
+            "top-left",
+            "bottom-right",
+            "bottom-left",
+        ]
+        sides.forEach((side) => {
+            const resizer = document.createElement("div")
+            resizer.className = `resizer ${side}`
+            menu.appendChild(resizer)
+            makeResizable(menu, resizer, side, menuData)
+        })
+    }
+
     document.body.appendChild(menu)
+
+    //Parte del resizable
+    const rect = menu.getBoundingClientRect()
+    menu.style.top = rect.top + "px"
+    menu.style.left = rect.left + "px"
+    menu.style.transform = ""
+
     openMenus.push(menu)
+
 
     menu.addEventListener("mousedown", () => {
         zIndexCounter++
@@ -91,7 +121,7 @@ function createMenu(menuData) {
     })
 
     if (menuData.id !== "loading-bar") {
-        menu.querySelector(".close-menu").addEventListener('click', () => {
+        menu.querySelector(".close-menu").addEventListener("click", () => {
             closeMenu(menu)
         })
     }
@@ -133,7 +163,7 @@ function createMenu(menuData) {
 /* Por si se crean mas playgrounds */
 function newCode(mode) {
     switch (mode) {
-        case 'html-css-js':
+        case "html-css-js":
             showLoadingBar("editor.html", "Starting new code ...")
             break
         default:
@@ -143,5 +173,72 @@ function newCode(mode) {
 
 function closeMenu(menu) {
     menu.remove()
-    openMenus = openMenus.filter(m => m !== menu)
+    openMenus = openMenus.filter((m) => m !== menu)
+}
+
+function makeResizable(menu, resizer, lado, menuData) {
+    resizer.addEventListener("mousedown", (e) => {
+        e.preventDefault()
+        document.body.style.userSelect = "none"
+
+        let startX = e.clientX
+        let startY = e.clientY
+        let startWidth = parseInt(window.getComputedStyle(menu).width, 10)
+        let startHeight = parseInt(window.getComputedStyle(menu).height, 10)
+        let startLeft = menu.offsetLeft
+        let startTop = menu.offsetTop
+
+        function mousemove(e) {
+            let newWidth = startWidth
+            let newHeight = startHeight
+            let newLeft = startLeft
+            let newTop = startTop
+
+            if (lado.includes("right")) {
+                newWidth = Math.min(
+                    Math.max(startWidth + (e.clientX - startX), menuData.minWidth || 100),
+                    menuData.maxWidth || 1000
+                )
+            }
+
+            if (lado.includes("left")) {
+                const diffX = e.clientX - startX
+                newWidth = Math.min(
+                    Math.max(startWidth - diffX, menuData.minWidth || 100),
+                    menuData.maxWidth || 1000
+                )
+                newLeft = startLeft + diffX
+            }
+
+            if (lado.includes("bottom")) {
+                newHeight = Math.min(
+                    Math.max(startHeight + (e.clientY - startY), menuData.minHeight || 100),
+                    menuData.maxHeight || 800
+                )
+            }
+
+            if (lado.includes("top")) {
+                const diffY = e.clientY - startY
+                newHeight = Math.min(
+                    Math.max(startHeight - diffY, menuData.minHeight || 100),
+                    menuData.maxHeight || 800
+                )
+                newTop = startTop + diffY
+            }
+
+            menu.style.width = newWidth + "px"
+            menu.style.height = newHeight + "px"
+            menu.style.left = newLeft + "px"
+            menu.style.top = newTop + "px"
+        }
+
+        function mouseup() {
+            document.removeEventListener("mousemove", mousemove)
+            document.removeEventListener("mouseup", mouseup)
+            document.body.style.userSelect = "auto"
+        }
+
+        document.addEventListener("mousemove", mousemove)
+        document.addEventListener("mouseup", mouseup)
+    })
 }

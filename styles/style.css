@@ -620,3 +620,72 @@ button:active {
 .bar-block.active {
     background: #c5b550;
 }
+
+.resizer {
+    position: absolute;
+    background: transparent;
+    z-index: 10000;
+}
+
+/* Lados */
+.resizer.top,
+.resizer.bottom {
+    height: 5px;
+    left: 0;
+    right: 0;
+}
+
+.resizer.top {
+    top: -2px;
+    cursor: ns-resize;
+}
+.resizer.bottom {
+    bottom: -2px;
+    cursor: ns-resize;
+}
+
+.resizer.left,
+.resizer.right {
+    width: 5px;
+    top: 0;
+    bottom: 0;
+}
+
+.resizer.left {
+    left: -2px;
+    cursor: ew-resize;
+}
+.resizer.right {
+    right: -2px;
+    cursor: ew-resize;
+}
+
+/* Esquinas */
+.resizer.top-left,
+.resizer.top-right,
+.resizer.bottom-left,
+.resizer.bottom-right {
+    width: 10px;
+    height: 10px;
+}
+
+.resizer.top-left {
+    top: -2px;
+    left: -2px;
+    cursor: nwse-resize;
+}
+.resizer.top-right {
+    top: -2px;
+    right: -2px;
+    cursor: nesw-resize;
+}
+.resizer.bottom-left {
+    bottom: -2px;
+    left: -2px;
+    cursor: nesw-resize;
+}
+.resizer.bottom-right {
+    bottom: -2px;
+    right: -2px;
+    cursor: nwse-resize;
+}
