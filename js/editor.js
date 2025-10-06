@@ -1,4 +1,92 @@
+const editors = {
+    htmlEditor: {
+        id: "menu-html",
+        icon: "assets/icons/html.svg",
+        title: "HTML",
+        resizable: true,
+        minWidth: 300,
+        minHeight: 200,
+        maxWidth: 1200,
+        maxHeight: 900,
+        x: 35,
+        y: 25,
+        spawnWidth: 600,
+        spawnHeight: 270,
+        content: `
+            <div class="command-console-container">
+                <div id="html-editor" class="monaco-editor"></div>
+                <button class="scroll-btn scroll-up" data-editor="html">▲</button>
+                <button class="scroll-btn scroll-down" data-editor="html">▼</button>
+            </div>
+        `,
+    },
+    cssEditor: {
+        id: "menu-css",
+        icon: "assets/icons/css.svg",
+        title: "CSS",
+        resizable: true,
+        minWidth: 300,
+        minHeight: 200,
+        maxWidth: 1200,
+        maxHeight: 900,
+        x: 645,
+        y: 25,
+        spawnWidth: 600,
+        spawnHeight: 270,
+        content: `
+            <div class="command-console-container">
+                <div id="css-editor" class="monaco-editor"></div>
+                <button class="scroll-btn scroll-up" data-editor="css">▲</button>
+                <button class="scroll-btn scroll-down" data-editor="css">▼</button>
+            </div>
+        `,
+    },
+    jsEditor: {
+        id: "menu-js",
+        icon: "assets/icons/javascript.svg",
+        title: "JavaScript",
+        resizable: true,
+        minWidth: 300,
+        minHeight: 200,
+        maxWidth: 1200,
+        maxHeight: 900,
+        x: 35,
+        y: 305,
+        spawnWidth: 600,
+        spawnHeight: 270,
+        content: `
+            <div class="command-console-container">
+                <div id="js-editor" class="monaco-editor"></div>
+                <button class="scroll-btn scroll-up" data-editor="js">▲</button>
+                <button class="scroll-btn scroll-down" data-editor="js">▼</button>
+            </div>
+        `,
+    },
+    output: {
+        id: "menu-output",
+        title: "Output",
+        resizable: true,
+        minWidth: 350,
+        minHeight: 200,
+        maxWidth: 1200,
+        maxHeight: 900,
+        x: 645,
+        y: 305,
+        spawnWidth: 600,
+        spawnHeight: 270,
+        content: `
+            <div class="command-console-container">
+                <iframe id="output-frame" sandbox="allow-scripts"></iframe>
+            </div>
+        `,
+    },
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    ["htmlEditor", "cssEditor", "jsEditor", "output"].forEach((id) => {
+        createMenu(editors[id])
+    })
+
     require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.53.0/min/vs' } })
     require(['vs/editor/editor.main'], function () {
         fetch('../libs/steam-classic.json')

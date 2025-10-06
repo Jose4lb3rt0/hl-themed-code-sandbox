@@ -6,6 +6,8 @@ const menus = {
         id: "menu-new",
         title: "New Code",
         resizable: false,
+        minWidth: 300,
+        minHeight: 135,
         content: `
             <button class="contentBtn" onclick="newCode('html-css-js')">HTML + CSS + JavaScript</button>
             <button class="contentBtn vital-menu-button" style="margin-top: 7%; align-self: end;">Cancel</button>
@@ -15,15 +17,18 @@ const menus = {
         id: "menu-load",
         title: "Load Code",
         resizable: false,
+        minWidth: 300,
         content: `
-            <span>Cargar un archivo existente:</span>
-            <button class="contentBtn">Subir archivo</button>
-            <button class="contentBtn">Elegir de la lista</button>
+        <span>Cargar un archivo existente:</span>
+        <button class="contentBtn">Subir archivo</button>
+        <button class="contentBtn">Elegir de la lista</button>
         `,
     },
     loading: {
         id: "loading-bar",
         title: "Loading...",
+        minWidth: 380,
+        minHeight: 110,
         resizable: false,
         content: `
             <div style="width: 100%; display: flex; flex-direction: column; gap: 0.5rem">
@@ -40,7 +45,6 @@ const menus = {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    //OPCIONES DEL MENÚ PRINCIPAL
     document.querySelectorAll(".option").forEach((option) => {
         option.addEventListener("click", () => {
             const menuType = option.dataset.menu
@@ -66,14 +70,30 @@ function createMenu(menuData) {
     menu.id = menuData.id
     menu.classList.add(menuData.id)
     menu.style.position = "absolute"
-    menu.style.top = "50%"
-    menu.style.left = "50%"
-    menu.style.transform = "translate(-50%, -50%)" //centrar en la pantalla, abajo se definen coordenadas post-creación para el estiramiento resizable
+
+    //tamaño
+    const startW = menuData.spawnWidth || menuData.minWidth || 300
+    const startH = menuData.spawnHeight || menuData.minHeight || 200
+    menu.style.width = `${startW}px`
+    menu.style.height = `${startH}px`
+
+    //posición
+    if (menuData.x != null && menuData.y != null) {
+        menu.style.left = menuData.x + "px"
+        menu.style.top = menuData.y + "px"
+        menu.style.transform = "none"
+    } else { 
+        //centro
+        menu.style.left = "50%"
+        menu.style.top = "50%"
+        menu.style.transform = "translate(-50%, -50%)"
+    }
+
     menu.style.zIndex = ++zIndexCounter
 
     let headerHTML = `
         <div class="menu-header">
-            <span><img src="assets/icons/steam.svg" class="lang-logo">${menuData.title}</span>
+            <span><img src="${menuData.icon ? menuData.icon : "assets/icons/steam.svg"}" class="lang-logo">${menuData.title}</span>
     `
     if (menuData.id !== "loading-bar") {
         headerHTML += `<button class="close-menu">✖</button>`
@@ -87,14 +107,8 @@ function createMenu(menuData) {
 
     if (menuData.resizable) {
         const sides = [
-            "top",
-            "right",
-            "bottom",
-            "left",
-            "top-right",
-            "top-left",
-            "bottom-right",
-            "bottom-left",
+            "top", "right", "bottom", "left",
+            "top-right", "top-left", "bottom-right", "bottom-left"
         ]
         sides.forEach((side) => {
             const resizer = document.createElement("div")
@@ -113,7 +127,6 @@ function createMenu(menuData) {
     menu.style.transform = ""
 
     openMenus.push(menu)
-
 
     menu.addEventListener("mousedown", () => {
         zIndexCounter++
