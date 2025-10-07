@@ -1,3 +1,5 @@
+import { playSound, sounds } from "./sounds.js"
+
 document.addEventListener("DOMContentLoaded", () => {
     const pauseMenu = document.getElementById("pause-menu")
     const resumeBtn = document.getElementById("resume-btn")
@@ -27,4 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
     exitBtn.addEventListener("click", () => {
         window.location.href = "index.html"
     })
+})
+
+//pronto necesitara otro lugar
+document.addEventListener("DOMContentLoaded", () => {
+    const resumeBtn = document.getElementById("resume-btn")
+    if (resumeBtn) {
+        resumeBtn.addEventListener("click", () => {
+            playSound(sounds.option)
+        })
+    }
 })

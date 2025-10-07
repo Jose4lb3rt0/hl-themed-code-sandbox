@@ -1,7 +1,10 @@
+import { sounds, playSequence, playSound } from "./sounds.js"
+import { showLoadingBar } from "./loading.js"
+
 let openMenus = []
 let zIndexCounter = 1000
 
-const menus = {
+export const menus = {
     new: {
         id: "menu-new",
         title: "New Code",
@@ -9,7 +12,7 @@ const menus = {
         minWidth: 300,
         minHeight: 135,
         content: `
-            <button class="contentBtn" onclick="newCode('html-css-js')">HTML + CSS + JavaScript</button>
+            <button class="contentBtn" id="btn-new-code">HTML + CSS + JavaScript</button>
             <button class="contentBtn vital-menu-button" style="margin-top: 7%; align-self: end;">Cancel</button>
         `,
     },
@@ -52,11 +55,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!menuData) return
 
             createMenu(menuData)
+            playSound(sounds.option)
         })
     })
 })
 
-function createMenu(menuData) {
+export function createMenu(menuData) {
     let existingMenu = document.getElementById(menuData.id)
 
     if (existingMenu) {
@@ -82,7 +86,7 @@ function createMenu(menuData) {
         menu.style.left = menuData.x + "px"
         menu.style.top = menuData.y + "px"
         menu.style.transform = "none"
-    } else { 
+    } else {
         //centro
         menu.style.left = "50%"
         menu.style.top = "50%"
@@ -171,6 +175,11 @@ function createMenu(menuData) {
         isDragging = false
         document.body.style.userSelect = "auto"
     })
+
+    const btn = menu.querySelector("#btn-new-code")
+    if (btn) {
+        btn.addEventListener("click", () => newCode('html-css-js'))
+    }
 }
 
 /* Por si se crean mas playgrounds */
@@ -185,6 +194,7 @@ function newCode(mode) {
 }
 
 function closeMenu(menu) {
+    playSound(sounds.close)
     menu.remove()
     openMenus = openMenus.filter((m) => m !== menu)
 }

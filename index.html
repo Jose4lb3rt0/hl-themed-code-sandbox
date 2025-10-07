@@ -1,58 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Code Playground</title>
-    <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="styles/intro.css">
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/intro.css" />
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.53.0/min/vs/loader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/monaco-themes/dist/monaco-themes.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script> -->
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="valve-intro-overlay">
-        <div id="black-screen"></div>
-        <div id="valve-intro-content">
-            <img id="valve-bg" src="assets/images/valve_intro.png" alt="Valve Background">
-            <img id="valve-logo" src="assets/images/valve_logo.svg" alt="Valve Logo">
-        </div>
-        <audio id="valve-intro-audio" src="assets/sounds/valve_intro.mp3"></audio>
+      <div id="black-screen"></div>
+      <div id="valve-intro-content">
+        <img
+          id="valve-bg"
+          src="assets/images/valve_intro.png"
+          alt="Valve Background"
+        />
+        <img
+          id="valve-logo"
+          src="assets/images/valve_logo.svg"
+          alt="Valve Logo"
+        />
+      </div>
+      <audio id="valve-intro-audio" src="assets/sounds/valve_intro.mp3"></audio>
     </div>
 
     <header>
-        <img src="assets/images/half-life-logo.png" alt="Half-Life Logo" class="hl-logo bg-logo">
-        <img src="assets/images/half-life-logo.png" alt="Half-Life Logo" class="hl-logo fg-logo">
+      <img
+        src="assets/images/half-life-logo.png"
+        alt="Half-Life Logo"
+        class="hl-logo bg-logo"
+      />
+      <img
+        src="assets/images/half-life-logo.png"
+        alt="Half-Life Logo"
+        class="hl-logo fg-logo"
+      />
     </header>
 
     <main>
-        <section class="phase" id="phase-1">
-            <div class="main-menu">
-                <table class="menu-table">
-                    <tr>
-                        <td class="option" data-menu="new">New code</td>
-                        <td class="desc">Create a new code file</td>
-                    </tr>
-                    <!-- <tr>
+      <section class="phase" id="phase-1">
+        <div class="main-menu">
+          <table class="menu-table">
+            <tr>
+              <td class="option" data-menu="new">New code</td>
+              <td class="desc">Create a new code file</td>
+            </tr>
+            <!-- <tr>
                         <td class="option" data-menu="load">Load code</td>
                         <td class="desc">Load an existing code file</td>
                     </tr> -->
-                </table>
-            </div>
-        </section>
+          </table>
+        </div>
+      </section>
     </main>
 
     <script src="js/intro.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            startValveIntro()
-        })
+      document.addEventListener("DOMContentLoaded", () => {
+        startValveIntro()
+      })
     </script>
-    <script src="js/loading.js"></script>
-    <script src="js/menus.js"></script>
-    <!-- <script src="js/sounds.js"></script> -->
-</body>
-
+    <script type="module" src="js/loading.js"></script>
+    <script type="module" src="js/menus.js"></script>
+    <script type="module" src="js/sounds.js"></script>
+  </body>
 </html>

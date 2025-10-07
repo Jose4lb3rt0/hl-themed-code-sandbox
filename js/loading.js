@@ -1,4 +1,6 @@
-function showLoadingBar(nextPage, description) {
+import { menus, createMenu } from './menus.js'
+
+export function showLoadingBar(nextPage, description) {
     const menuData = menus.loading
     createMenu(menuData)
 

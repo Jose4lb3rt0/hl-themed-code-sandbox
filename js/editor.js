@@ -1,3 +1,5 @@
+import { createMenu } from "./menus.js"
+
 const editors = {
     htmlEditor: {
         id: "menu-html",
