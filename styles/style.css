@@ -105,16 +105,20 @@ main {
   flex-direction: column;
   /* background: #c03c3c; */
   justify-content: flex-end;
-  padding: 0 11% 1% 11%;
+  padding: 0 9% 1% 9%;
   box-sizing: border-box;
 }
 
 .main-menu {
   /* background: #831f83; */
   width: 100%;
-  height: 50%;
+  height: 58%;
   margin: 0 0 4% 0;
   box-sizing: border-box;
+}
+
+#pause-menu .main-menu {
+  height: 40%;
 }
 
 .menu-table {
@@ -142,14 +146,15 @@ header {
 .option {
   font-size: larger;
   font-weight: 700;
-  color: #efae00;
+  color: #efaf00;
   text-shadow: 0 1px 1px #0000007c;
   cursor: pointer;
   transition: color 0s, text-shadow 0s;
 }
 
 .option:hover {
-  color: #fff443;
+  /* color: #fff443; */
+  color: #feff1c;
   text-shadow: 0px 0px 7px #fff443;
   transition: none;
 }
@@ -704,4 +709,62 @@ button:active {
   bottom: -2px;
   right: -2px;
   cursor: nwse-resize;
+}
+
+#pause-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* background: #c03c3c; */
+  justify-content: flex-end;
+  padding: 0 9% 1% 9%;
+  box-sizing: border-box;
+  z-index: 5000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#pause-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pause-content {
+  background: rgba(25, 25, 25, 0.9);
+  border: 2px solid #ff6600;
+  padding: 2rem 3rem;
+  text-align: center;
+  border-radius: 12px;
+  color: #f2f2f2;
+  font-family: monospace;
+  box-shadow: 0 0 40px rgba(255, 120, 0, 0.5);
+}
+
+.pause-content h1 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  letter-spacing: 2px;
+}
+
+.pause-content button {
+  background: #ff6600;
+  border: none;
+  color: black;
+  padding: 0.8rem 1.5rem;
+  margin: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.pause-content button:hover {
+  background: #ffaa33;
+}
+
+.hidden {
+  display: none;
 }

@@ -24,11 +24,25 @@
       </section>
     </main>
 
+    <div id="pause-menu" class="hidden">
+      <div class="main-menu">
+        <table class="menu-table">
+          <tr>
+            <td class="option" id="resume-btn">Resume code</td>
+          </tr>
+          <tr>
+            <td class="option" id="exit-btn">Leave code</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
     <script src="libs/howler.core.min.js"></script>
     <script>
       console.log("Howler disponible?", typeof Howl);
     </script>
     <script src="js/editor.js"></script>
     <script src="js/menus.js"></script>
+    <script src="js/pause.js"></script>
   </body>
 </html>

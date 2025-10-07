@@ -255,3 +255,4 @@ function makeResizable(menu, resizer, lado, menuData) {
         document.addEventListener("mouseup", mouseup)
     })
 }
+
