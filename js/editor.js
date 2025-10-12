@@ -3,6 +3,7 @@ import { createMenu } from "./menus.js"
 const editors = {
     htmlEditor: {
         id: "menu-html",
+        class: "editor",
         icon: "assets/icons/html.svg",
         title: "HTML",
         resizable: true,
@@ -14,6 +15,10 @@ const editors = {
         y: 25,
         spawnWidth: 600,
         spawnHeight: 270,
+        extraButtons: [
+            { id: "hide-btn", icon: "🗕", title: "Ocultar" },
+            { id: "reset-btn", icon: "↺", title: "Tamaño original" }
+        ],
         content: `
             <div class="command-console-container">
                 <div id="html-editor" class="monaco-editor"></div>
@@ -24,6 +29,7 @@ const editors = {
     },
     cssEditor: {
         id: "menu-css",
+        class: "editor",
         icon: "assets/icons/css.svg",
         title: "CSS",
         resizable: true,
@@ -35,6 +41,10 @@ const editors = {
         y: 25,
         spawnWidth: 600,
         spawnHeight: 270,
+        extraButtons: [
+            { id: "hide-btn", icon: "🗕", title: "Ocultar" },
+            { id: "reset-btn", icon: "↺", title: "Tamaño original" }
+        ],
         content: `
             <div class="command-console-container">
                 <div id="css-editor" class="monaco-editor"></div>
@@ -45,6 +55,7 @@ const editors = {
     },
     jsEditor: {
         id: "menu-js",
+        class: "editor",
         icon: "assets/icons/javascript.svg",
         title: "JavaScript",
         resizable: true,
@@ -56,6 +67,10 @@ const editors = {
         y: 305,
         spawnWidth: 600,
         spawnHeight: 270,
+        extraButtons: [
+            { id: "hide-btn", icon: "🗕", title: "Ocultar" },
+            { id: "reset-btn", icon: "↺", title: "Tamaño original" }
+        ],
         content: `
             <div class="command-console-container">
                 <div id="js-editor" class="monaco-editor"></div>
@@ -66,6 +81,7 @@ const editors = {
     },
     output: {
         id: "menu-output",
+        class: "editor",
         title: "Output",
         resizable: true,
         minWidth: 350,
@@ -76,6 +92,10 @@ const editors = {
         y: 305,
         spawnWidth: 600,
         spawnHeight: 270,
+        extraButtons: [
+            { id: "hide-btn", icon: "🗕", title: "Ocultar" },
+            { id: "reset-btn", icon: "↺", title: "Tamaño original" }
+        ],
         content: `
             <div class="command-console-container">
                 <iframe id="output-frame" sandbox="allow-scripts"></iframe>

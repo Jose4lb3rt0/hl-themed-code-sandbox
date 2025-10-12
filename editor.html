@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Code Playground</title>
     <link rel="stylesheet" href="styles/style.css" />
-    <link rel="stylesheet" href="styles/intro.css" />
+    <link rel="stylesheet" href="styles/code-intro.css" />
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.53.0/min/vs/loader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/monaco-themes/dist/monaco-themes.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script> -->
   </head>
 
   <body>
-    <!-- <header>
-        <img src="assets/images/half-life-logo.png" alt="Half-Life Logo" class="hl-logo bg-logo">
-        <img src="assets/images/half-life-logo.png" alt="Half-Life Logo" class="hl-logo fg-logo">
-    </header> -->
+    <div id="intro-overlay">
+      <div id="black-screen"></div>
+      <div id="intro-content">
+        <img
+          id="half-life-logo"
+          src="assets/images/half-life-logo.png"
+          alt="Half-Life Logo"
+        />
+      </div>
+    </div>
 
     <main>
       <section class="phase" id="phase-2">
@@ -31,12 +37,22 @@
             <td class="option" id="resume-btn">Resume code</td>
           </tr>
           <tr>
+            <td class="option" id="resume-btn">Options</td>
+          </tr>
+          <tr>
             <td class="option" id="exit-btn">Leave code</td>
           </tr>
         </table>
       </div>
     </div>
 
+    <script type="module" src="js/intro.js"></script>
+    <script type="module">
+      import { startCodeIntro } from "./js/intro.js"
+      document.addEventListener("DOMContentLoaded", () => {
+        startCodeIntro()
+      })
+    </script>
     <script type="module" src="js/sounds.js"></script>
     <script type="module" src="js/editor.js"></script>
     <script type="module" src="js/menus.js"></script>

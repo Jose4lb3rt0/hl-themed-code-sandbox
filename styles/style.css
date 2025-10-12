@@ -560,6 +560,12 @@ button:active {
   font-size: larger;
 }
 
+.floating-menu.minimized {
+  min-height: 35px !important;
+  height: 35px !important;
+  overflow: hidden;
+}
+
 .floating-menu.hidden {
   display: none;
 }
@@ -584,6 +590,7 @@ button:active {
   gap: 0.3rem;
 }
 
+.header-btn,
 .close-menu {
   padding: 0px 0px;
 
@@ -597,6 +604,12 @@ button:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
 }
 
 .menu-content {

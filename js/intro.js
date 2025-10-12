@@ -1,4 +1,6 @@
-function startValveIntro() {
+import { playSound, sounds } from './sounds.js'
+
+export function startValveIntro() {
     document.body.classList.add('intro-active')
     const overlay = document.getElementById('valve-intro-overlay')
     const bg = document.getElementById('valve-bg')
@@ -36,4 +38,29 @@ function startValveIntro() {
             audio.pause()
         }
     })
+}
+
+export function startCodeIntro() {
+    document.body.classList.add('intro-active')
+    const overlay = document.getElementById('intro-overlay')
+    const blackScreen = document.getElementById('black-screen')
+    const logo = document.getElementById('half-life-logo')
+
+    if (overlay && logo) {
+        logo.classList.add('show')
+        playSound(sounds.s02, 0.1)
+
+        setTimeout(() => {
+            blackScreen.classList.add("hide")
+        }, 3000)
+
+        setTimeout(() => {
+            logo.classList.add("hide")
+        }, 3000)
+
+        setTimeout(() => {
+            overlay.remove()
+            document.body.classList.remove('intro-active')
+        }, 7000)
+    }
 }

@@ -1,0 +1,59 @@
+#intro-overlay {
+  position: fixed;
+  z-index: 99999;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#intro-content {
+  position: relative;
+  inset: 0;
+  height: 100vh;
+  width: auto;
+  /* isolation: isolate; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#black-screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 1;
+  z-index: 1;
+}
+
+#half-life-logo {
+  width: 70%;
+  height: auto;
+  position: absolute;
+  z-index: 2;
+  object-fit: contain;
+  display: block;
+  position: relative;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#half-life-logo.show {
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+#half-life-logo.hide {
+  opacity: 0;
+  transition: opacity 3s;
+}
+
+#black-screen.hide {
+  opacity: 0;
+  transition: opacity 2s;
+}

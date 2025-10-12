@@ -1,6 +1,9 @@
 export const sounds = {
     option: "assets/sounds/launch_option.wav",
     close: "assets/sounds/close_menu.wav",
+    click_release: "assets/sounds/click_release.wav",
+
+    s02: "assets/sounds/music/Half-Life02.mp3",
     // select: "assets/sounds/launch_option.wav",
     // openMenu: "assets/sounds/launch_upmenu1.wav",
 }

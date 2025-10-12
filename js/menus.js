@@ -94,15 +94,22 @@ export function createMenu(menuData) {
     }
 
     menu.style.zIndex = ++zIndexCounter
+    const hasMultipleButtons = menuData.class !== ("" || null) ? true : false
 
     let headerHTML = `
         <div class="menu-header">
-            <span><img src="${menuData.icon ? menuData.icon : "assets/icons/steam.svg"}" class="lang-logo">${menuData.title}</span>
+            <span>
+                <img src="${menuData.icon ? menuData.icon : 'assets/icons/steam.svg'}" class="lang-logo">
+                ${menuData.title}
+            </span>
+            <div class="header-buttons">
+                ${menuData.extraButtons ? menuData.extraButtons.map(btn =>
+        `<button class="header-btn" id="${btn.id}" title="${btn.title}">${btn.icon}</button>`
+    ).join('') : ''}
+                    ${menuData.id !== 'loading-bar' ? `<button class="close-menu">✖</button>` : ''}
+                </div>
+        </div>
     `
-    if (menuData.id !== "loading-bar") {
-        headerHTML += `<button class="close-menu">✖</button>`
-    }
-    headerHTML += `</div>`
 
     menu.innerHTML = `
         ${headerHTML}
@@ -154,31 +161,59 @@ export function createMenu(menuData) {
         })
     }
 
-    let isDragging = false
-    let offsetX, offsetY
     const header = menu.querySelector(".menu-header")
+    let offsetX, offsetY
+    let isDragging = false
 
     header.addEventListener("mousedown", (e) => {
         isDragging = true
         offsetX = e.clientX - menu.offsetLeft
         offsetY = e.clientY - menu.offsetTop
+
+        menu.style.transition = "none"
         document.body.style.userSelect = "none"
+
+        document.addEventListener("mousemove", onDrag)
+        document.addEventListener("mouseup", stopDrag)
     })
 
-    header.addEventListener("mousemove", (e) => {
+    function onDrag(e) {
         if (!isDragging) return
         menu.style.left = `${e.clientX - offsetX}px`
         menu.style.top = `${e.clientY - offsetY}px`
-    })
+    }
 
-    header.addEventListener("mouseup", () => {
+    function stopDrag() {
+        if (!isDragging) return
         isDragging = false
         document.body.style.userSelect = "auto"
-    })
+        document.removeEventListener("mousemove", onDrag)
+        document.removeEventListener("mouseup", stopDrag)
+    }
+
+    const originalWidth = menu.offsetWidth
+    const originalHeight = menu.offsetHeight
 
     const btn = menu.querySelector("#btn-new-code")
     if (btn) {
         btn.addEventListener("click", () => newCode('html-css-js'))
+    }
+
+    const hideBtn = menu.querySelector("#hide-btn")
+    if (hideBtn) {
+        hideBtn.addEventListener("click", () => {
+            // menu.style.display = menu.style.display === "none" ? "flex" : "none"
+            menu.classList.toggle("minimized")
+        })
+    }
+
+    const resetBtn = menu.querySelector("#reset-btn")
+    if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+            playSound(sounds.click_release, 0.5)
+            menu.style.width = originalWidth + "px"
+            menu.style.height = originalHeight + "px"
+        })
     }
 }
 
