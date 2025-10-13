@@ -1,3 +1,4 @@
+import { AppConfig } from "./config.js"
 import { createMenu } from "./menus.js"
 
 const editors = {
@@ -104,6 +105,10 @@ const editors = {
     },
 }
 
+window.editorsReady = new Promise((resolve) => {
+    window.resolveEditorsReady = resolve
+})
+
 document.addEventListener('DOMContentLoaded', () => {
     ["htmlEditor", "cssEditor", "jsEditor", "output"].forEach((id) => {
         createMenu(editors[id])
@@ -121,34 +126,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.htmlEditor = monaco.editor.create(document.getElementById('html-editor'), {
                     value: '<h1>Hello, world!</h1>',
                     language: 'html',
-                    theme: 'vs-dark',
+                    // theme: 'vs-dark',
+                    // automaticLayout: true,
+                    // minimap: { enabled: false },
+                    // theme: 'steamClassic',
+                    // lineNumbers: 'off',
+                    theme: AppConfig.editor.theme,
                     automaticLayout: true,
-                    minimap: { enabled: false },
-                    theme: 'steamClassic',
-                    lineNumbers: 'off'
+                    lineNumbers: AppConfig.editor.lineNumbers,
+                    wordWrap: AppConfig.editor.wordWrap,
+                    minimap: { enabled: AppConfig.editor.minimap },
+                    fontSize: AppConfig.editor.fontSize
                 })
 
                 window.cssEditor = monaco.editor.create(document.getElementById('css-editor'), {
                     value: 'h1 { color: orange }',
                     language: 'css',
-                    theme: 'vs-dark',
+                    theme: AppConfig.editor.theme,
                     automaticLayout: true,
-                    minimap: { enabled: false },
-                    theme: 'steamClassic',
-                    lineNumbers: 'off'
+                    lineNumbers: AppConfig.editor.lineNumbers,
+                    wordWrap: AppConfig.editor.wordWrap,
+                    minimap: { enabled: AppConfig.editor.minimap },
+                    fontSize: AppConfig.editor.fontSize
                 })
 
                 window.jsEditor = monaco.editor.create(document.getElementById('js-editor'), {
                     value: 'console.log("Hello Half-Life!")',
                     language: 'javascript',
-                    theme: 'vs-dark',
+                    theme: AppConfig.editor.theme,
                     automaticLayout: true,
-                    minimap: { enabled: false },
-                    theme: 'steamClassic',
-                    lineNumbers: 'off'
+                    lineNumbers: AppConfig.editor.lineNumbers,
+                    wordWrap: AppConfig.editor.wordWrap,
+                    minimap: { enabled: AppConfig.editor.minimap },
+                    fontSize: AppConfig.editor.fontSize
                 })
 
-                const editors = {
+                const editorInstances = {
                     html: window.htmlEditor,
                     css: window.cssEditor,
                     js: window.jsEditor
@@ -159,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const getEditor = () => {
                         const editorKey = btn.dataset.editor
-                        return editors[editorKey] || null
+                        return editorInstances[editorKey] || null
                     }
 
                     const scrollEditor = (editor, direction) => {
@@ -228,13 +241,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     `
                 }
 
-                Object.values(editors).forEach(editor => {
+                Object.values(editorInstances).forEach(editor => {
                     editor.onDidChangeModelContent(() => {
                         updateOutput()
                     })
                 })
 
                 updateOutput()
+                window.resolveEditorsReady()
             })
     })
 })

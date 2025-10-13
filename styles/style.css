@@ -781,3 +781,102 @@ button:active {
 .hidden {
   display: none;
 }
+
+.tab-container {
+  display: flex;
+  gap: 1px;
+  position: relative;
+  z-index: 2;
+  align-items: flex-end; /*clave*/
+}
+
+.tab {
+  font-family: "ProggyClean", monospace !important;
+  font-size: large;
+  padding: 6px 10px;
+  color: #ffffff;
+  background: #4c5844;
+  border-top: 1px solid #889180;
+  border-left: 1px solid #889180;
+  border-right: 1px solid #282e22;
+  border-bottom: 1px solid #282e22;
+  cursor: pointer;
+  /* transition: all 0.15s ease; */
+  position: relative;
+  z-index: 2;
+}
+
+/* .tab:not(.active):hover {
+  background: #55614c;
+} */
+
+#menu-options .menu-content {
+  padding: 0% 1% 1% 1%;
+}
+
+.tab.active {
+  color: #c5b550;
+  height: calc(100% + 4px);
+  margin-bottom: -2px;
+  border-bottom-color: transparent;
+  z-index: 3;
+}
+
+.options-content {
+  /* flex: 1; */
+  height: 100%;
+  /* padding: 1rem; */
+  border-top: 1px solid #889180;
+  border-left: 1px solid #889180;
+  border-right: 1px solid #282e22;
+  border-bottom: 1px solid #282e22;
+  box-sizing: border-box;
+  background: #4c5844;
+}
+
+.editor-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1rem 3rem;
+}
+
+.option-row {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  gap: 1rem;
+}
+
+.option-row label {
+  flex: 0 0 110px;
+  text-align: right;
+  color: #ffffff;
+  font-family: "ProggyClean", monospace !important;
+  white-space: nowrap;
+}
+
+.option-row input[type="number"],
+.option-row select {
+  flex: 1;
+  max-width: 150px;
+  background: #3e4637;
+  border-bottom: 1px solid #889180;
+  border-right: 1px solid #889180;
+  border-left: 1px solid #282e22;
+  border-top: 1px solid #282e22;
+
+  color: #ffffff;
+  font-family: "ProggyClean", monospace !important;
+  padding: 5px 4px;
+  box-sizing: border-box;
+}
+
+.option-row select option {
+  background: #4c5944;
+}
+
+.option-row select option:hover {
+  background: #958930;
+}
+

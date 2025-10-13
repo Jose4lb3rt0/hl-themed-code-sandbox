@@ -1,5 +1,6 @@
 import { sounds, playSequence, playSound } from "./sounds.js"
 import { showLoadingBar } from "./loading.js"
+import { AppConfig, setConfig } from "./config.js"
 
 let openMenus = []
 let zIndexCounter = 1000
@@ -27,6 +28,24 @@ export const menus = {
         <button class="contentBtn">Elegir de la lista</button>
         `,
     },
+    options: {
+        id: "menu-options",
+        title: "Options",
+        resizable: false,
+        minWidth: 500,
+        minHeight: 400,
+        content: `
+            <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+                <div class="tab-container">
+                    <!--<button class="contentBtn vital-menu-button tab" data-tab="general">General</button>-->
+                    <button class="contentBtn vital-menu-button tab" data-tab="editor">Editor</button>
+                    <button class="contentBtn vital-menu-button tab" data-tab="audio">Audio</button>
+                </div>
+                <div class="options-content">
+                </div>
+            </div>
+        `
+    },
     loading: {
         id: "loading-bar",
         title: "Loading...",
@@ -40,11 +59,53 @@ export const menus = {
                     <div id="bar-bg" style="width:100%; background: #3e4737; overflow:hidden; height: 28px; padding: 4px; box-sizing: border-box; display: flex; gap: 2px">
                         <div id="progress-bar" style="width:0%; height:100%; background:#0f0; transition:width 0.3s"></div>
                     </div>
-                    <button class="contentBtn vital-menu-button" style="align-self: end">Cancel</button>
+                    <button class="contentBtn vital-menu-button cancel" style="align-self: end">Cancel</button>
                 </div>
             </div>
         `,
     },
+}
+
+export const optionsMenuContent = {
+    general: `s`,
+    editor: `
+        <div id="editor-options" class="editor-options">
+            <div class="option-row">
+                <label>Language</label>
+                <select id="lang-select">
+                    <option value="en" selected>English</option>       
+                    <option value="es">Español</option>       
+                </select>
+            </div>
+
+            <div class="option-row">
+                <label>Line Numbers</label>
+                <select id="line-numbers-select">
+                    <option value="on">On</option>       
+                    <option value="off" selected>Off</option>       
+                </select>
+            </div>
+
+            <div class="option-row">
+                <label>Word Wrap</label>
+                <select id="word-wrap-select">
+                    <option value="on">On</option>       
+                    <option value="off" selected>Off</option>       
+                </select>
+            </div>
+
+            <div class="option-row">
+                <label>Font Size</label>
+                <input type="number" id="font-size-input" value="14">
+            </div>
+
+            <div class="option-row">
+                <label>Show Minimap</label>
+                <input type="checkbox" id="show-minimap" checked>
+            </div>
+        </div>
+    `,
+    audio: `a`,
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -150,7 +211,7 @@ export function createMenu(menuData) {
         })
     }
 
-    const cancelBtn = menu.querySelector(".vital-menu-button")
+    const cancelBtn = menu.querySelector(".vital-menu-button.cancel")
     if (cancelBtn) {
         cancelBtn.addEventListener("click", () => {
             closeMenu(menu)
@@ -214,6 +275,30 @@ export function createMenu(menuData) {
             menu.style.width = originalWidth + "px"
             menu.style.height = originalHeight + "px"
         })
+    }
+
+    if (menuData.id === "menu-options") {
+        const tabContainer = menu.querySelector(".tab-container")
+        const tabs = tabContainer.querySelectorAll(".tab")
+        const optionsContent = menu.querySelector(".options-content")
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                tabs.forEach(t => t.classList.remove("active"))
+                tab.classList.add("active")
+
+                const selectedTab = tab.dataset.tab
+                optionsContent.innerHTML = optionsMenuContent[selectedTab] || "<p>No content available.</p>"
+
+                if (selectedTab === "editor") attachEditorOptionEvents()
+            })
+        })
+
+        tabs[0].classList.add("active")
+        const defaultTab = tabs[0].dataset.tab
+        optionsContent.innerHTML = optionsMenuContent[defaultTab] || "<p>No content available.</p>"
+
+        if (defaultTab === "editor") attachEditorOptionEvents()
     }
 }
 
@@ -298,6 +383,74 @@ function makeResizable(menu, resizer, lado, menuData) {
 
         document.addEventListener("mousemove", mousemove)
         document.addEventListener("mouseup", mouseup)
+    })
+}
+
+function saveConfig() {
+    localStorage.setItem('appConfig', JSON.stringify(AppConfig))
+}
+
+function attachEditorOptionEvents() {
+    const lineNumbersSelect = document.getElementById("line-numbers-select")
+    const wordWrapSelect = document.getElementById("word-wrap-select")
+    const fontSizeInput = document.getElementById("font-size-input")
+    const showMinimap = document.getElementById("show-minimap")
+
+    if (!lineNumbersSelect || !wordWrapSelect || !fontSizeInput || !showMinimap) return
+
+    lineNumbersSelect.value = AppConfig.editor.lineNumbers || "off"
+    wordWrapSelect.value = AppConfig.editor.wordWrap || "off"
+    fontSizeInput.value = AppConfig.editor.fontSize || 14
+    showMinimap.checked = AppConfig.editor.minimap ?? true
+
+    async function updateAllEditors(updateFn) {
+        await window.editorsReady
+
+        const editors = [window.htmlEditor, window.cssEditor, window.jsEditor]
+
+        if (!editors || editors.length === 0) {
+            console.warn('Editors not found')
+            return
+        }
+
+        editors.forEach(editor => {
+            if (editor && typeof editor.updateOptions === 'function') {
+                try {
+                    updateFn(editor)
+                } catch (error) {
+                    console.warn('Error updating editor:', error)
+                }
+            }
+        })
+    }
+
+    lineNumbersSelect.addEventListener("change", (e) => {
+        const value = e.target.value
+        console.log("Line numbers set to: ", value)
+        setConfig('editor.lineNumbers', value)
+        updateAllEditors(editor => editor.updateOptions({ lineNumbers: value }))
+        saveConfig()
+    })
+
+    wordWrapSelect.addEventListener("change", (e) => {
+        const value = e.target.value
+        setConfig('editor.wordWrap', value)
+        updateAllEditors(editor => editor.updateOptions({ wordWrap: value }))
+        saveConfig()
+    })
+
+    fontSizeInput.addEventListener("change", (e) => {
+        const value = parseInt(e.target.value, 10)
+        setConfig('editor.fontSize', value)
+        updateAllEditors(editor => editor.updateOptions({ fontSize: value }))
+        saveConfig()
+    })
+
+    showMinimap.addEventListener("change", (e) => {
+        const value = e.target.checked
+        setConfig('editor.minimap', value)
+        updateAllEditors(editor => editor.updateOptions({ minimap: { enabled: value } }))
+        saveConfig()
     })
 }
 
