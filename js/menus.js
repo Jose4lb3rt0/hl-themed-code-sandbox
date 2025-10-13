@@ -3,7 +3,7 @@ import { showLoadingBar } from "./loading.js"
 import { AppConfig, setConfig } from "./config.js"
 
 let openMenus = []
-let zIndexCounter = 1000
+let zIndexCounter = 1000 //contador de menus en 1000 con respecto al css
 
 export const menus = {
     new: {
@@ -12,6 +12,7 @@ export const menus = {
         resizable: false,
         minWidth: 300,
         minHeight: 135,
+        layer: "overlay",
         content: `
             <button class="contentBtn" id="btn-new-code">HTML + CSS + JavaScript</button>
             <button class="contentBtn vital-menu-button" style="margin-top: 7%; align-self: end;">Cancel</button>
@@ -22,6 +23,7 @@ export const menus = {
         title: "Load Code",
         resizable: false,
         minWidth: 300,
+        layer: "overlay",
         content: `
         <span>Cargar un archivo existente:</span>
         <button class="contentBtn">Subir archivo</button>
@@ -34,6 +36,7 @@ export const menus = {
         resizable: false,
         minWidth: 500,
         minHeight: 400,
+        layer: "overlay",
         content: `
             <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
                 <div class="tab-container">
@@ -57,6 +60,7 @@ export const menus = {
         minWidth: 380,
         minHeight: 110,
         resizable: false,
+        layer: "overlay",
         content: `
             <div style="width: 100%; display: flex; flex-direction: column; gap: 0.5rem">
                 <span id="loading-text" style="color: #a0ab95"></span>
@@ -100,6 +104,18 @@ export function createMenu(menuData) {
     menu.id = menuData.id
     menu.classList.add(menuData.id)
     menu.style.position = "absolute"
+
+    //logica del layer
+    const isOverlayMenu = menuData.layer === "overlay"
+    const baseZ = isOverlayMenu ? 10000 : 1000 //el menu de pausa esta en 5000 y los flotantes en 1000, pero aqui se usa 10000 para que siempre esten encima
+    zIndexCounter = Math.max(zIndexCounter, baseZ)
+    menu.style.zIndex = zIndexCounter
+
+    //contenedor segun tipo
+    const parent = isOverlayMenu
+        ? document.body  //se muestra por encima del overlay
+        : document.querySelector("main") || document.body //menús de editor van debajo
+    parent.appendChild(menu)
 
     //tamaño
     const startW = menuData.spawnWidth || menuData.minWidth || 300

@@ -16,6 +16,7 @@ const editors = {
         y: 25,
         spawnWidth: 600,
         spawnHeight: 270,
+        layer: "editor",
         extraButtons: [
             { id: "hide-btn", icon: "🗕", title: "Ocultar" },
             { id: "reset-btn", icon: "↺", title: "Tamaño original" }
@@ -42,6 +43,7 @@ const editors = {
         y: 25,
         spawnWidth: 600,
         spawnHeight: 270,
+        layer: "editor",
         extraButtons: [
             { id: "hide-btn", icon: "🗕", title: "Ocultar" },
             { id: "reset-btn", icon: "↺", title: "Tamaño original" }
@@ -68,6 +70,7 @@ const editors = {
         y: 305,
         spawnWidth: 600,
         spawnHeight: 270,
+        layer: "editor",
         extraButtons: [
             { id: "hide-btn", icon: "🗕", title: "Ocultar" },
             { id: "reset-btn", icon: "↺", title: "Tamaño original" }
@@ -93,6 +96,7 @@ const editors = {
         y: 305,
         spawnWidth: 600,
         spawnHeight: 270,
+        layer: "editor",
         extraButtons: [
             { id: "hide-btn", icon: "🗕", title: "Ocultar" },
             { id: "reset-btn", icon: "↺", title: "Tamaño original" }
