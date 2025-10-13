@@ -37,11 +37,16 @@ export const menus = {
         content: `
             <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
                 <div class="tab-container">
-                    <!--<button class="contentBtn vital-menu-button tab" data-tab="general">General</button>-->
+                    <button class="contentBtn vital-menu-button tab" data-tab="general">General</button>
                     <button class="contentBtn vital-menu-button tab" data-tab="editor">Editor</button>
                     <button class="contentBtn vital-menu-button tab" data-tab="audio">Audio</button>
                 </div>
                 <div class="options-content">
+                </div>
+                <div style="width: 100%; display: flex; justify-content: flex-end; padding: 0.2rem 0; gap: 0.4rem;">
+                    <button id="btn-accept-config" class="contentBtn vital-menu-button" data-tab="editor">Aceptar</button>
+                    <button id="btn-cancel-config" class="contentBtn vital-menu-button" data-tab="editor">Cancelar</button>
+                    <button id="btn-apply-config" class="contentBtn vital-menu-button" data-tab="audio">Aplicar</button>
                 </div>
             </div>
         `
@@ -66,47 +71,7 @@ export const menus = {
     },
 }
 
-export const optionsMenuContent = {
-    general: `s`,
-    editor: `
-        <div id="editor-options" class="editor-options">
-            <div class="option-row">
-                <label>Language</label>
-                <select id="lang-select">
-                    <option value="en" selected>English</option>       
-                    <option value="es">Español</option>       
-                </select>
-            </div>
-
-            <div class="option-row">
-                <label>Line Numbers</label>
-                <select id="line-numbers-select">
-                    <option value="on">On</option>       
-                    <option value="off" selected>Off</option>       
-                </select>
-            </div>
-
-            <div class="option-row">
-                <label>Word Wrap</label>
-                <select id="word-wrap-select">
-                    <option value="on">On</option>       
-                    <option value="off" selected>Off</option>       
-                </select>
-            </div>
-
-            <div class="option-row">
-                <label>Font Size</label>
-                <input type="number" id="font-size-input" value="14">
-            </div>
-
-            <div class="option-row">
-                <label>Show Minimap</label>
-                <input type="checkbox" id="show-minimap" checked>
-            </div>
-        </div>
-    `,
-    audio: `a`,
-}
+let tempConfig = structuredClone(AppConfig)
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".option").forEach((option) => {
@@ -278,6 +243,7 @@ export function createMenu(menuData) {
     }
 
     if (menuData.id === "menu-options") {
+        tempConfig = structuredClone(AppConfig)
         const tabContainer = menu.querySelector(".tab-container")
         const tabs = tabContainer.querySelectorAll(".tab")
         const optionsContent = menu.querySelector(".options-content")
@@ -288,17 +254,33 @@ export function createMenu(menuData) {
                 tab.classList.add("active")
 
                 const selectedTab = tab.dataset.tab
-                optionsContent.innerHTML = optionsMenuContent[selectedTab] || "<p>No content available.</p>"
-
-                if (selectedTab === "editor") attachEditorOptionEvents()
+                renderOptionsTab(selectedTab, optionsContent)
             })
         })
 
         tabs[0].classList.add("active")
-        const defaultTab = tabs[0].dataset.tab
-        optionsContent.innerHTML = optionsMenuContent[defaultTab] || "<p>No content available.</p>"
+        renderOptionsTab(tabs[0].dataset.tab, optionsContent)
 
-        if (defaultTab === "editor") attachEditorOptionEvents()
+        const btnAccept = menu.querySelector("#btn-accept-config")
+        const btnCancel = menu.querySelector("#btn-cancel-config")
+        const btnApply = menu.querySelector("#btn-apply-config")
+
+        btnApply.addEventListener("click", () => {
+            applyTempConfig()
+            playSound(sounds.apply)
+        })
+
+        btnCancel.addEventListener("click", () => {
+            tempConfig = structuredClone(AppConfig)
+            playSound(sounds.cancel)
+            closeMenu(menu)
+        })
+
+        btnAccept.addEventListener("click", () => {
+            applyTempConfig()
+            playSound(sounds.accept)
+            closeMenu(menu)
+        })
     }
 }
 
@@ -390,67 +372,158 @@ function saveConfig() {
     localStorage.setItem('appConfig', JSON.stringify(AppConfig))
 }
 
-function attachEditorOptionEvents() {
-    const lineNumbersSelect = document.getElementById("line-numbers-select")
-    const wordWrapSelect = document.getElementById("word-wrap-select")
-    const fontSizeInput = document.getElementById("font-size-input")
-    const showMinimap = document.getElementById("show-minimap")
+function applyTempConfig() {
+    Object.assign(AppConfig, structuredClone(tempConfig))
+    saveConfig()
 
-    if (!lineNumbersSelect || !wordWrapSelect || !fontSizeInput || !showMinimap) return
-
-    lineNumbersSelect.value = AppConfig.editor.lineNumbers || "off"
-    wordWrapSelect.value = AppConfig.editor.wordWrap || "off"
-    fontSizeInput.value = AppConfig.editor.fontSize || 14
-    showMinimap.checked = AppConfig.editor.minimap ?? true
-
-    async function updateAllEditors(updateFn) {
-        await window.editorsReady
-
-        const editors = [window.htmlEditor, window.cssEditor, window.jsEditor]
-
-        if (!editors || editors.length === 0) {
-            console.warn('Editors not found')
-            return
+    const editors = [window.htmlEditor, window.cssEditor, window.jsEditor]
+    editors.forEach(editor => {
+        if (editor && editor.updateOptions) {
+            editor.updateOptions({
+                lineNumbers: AppConfig.editor.lineNumbers,
+                wordWrap: AppConfig.editor.wordWrap,
+                fontSize: AppConfig.editor.fontSize,
+                minimap: { enabled: AppConfig.editor.minimap },
+                cursorBlinking: AppConfig.editor.cursorBlinking,
+                cursorSmoothCaretAnimation: AppConfig.editor.cursorSmoothCaretAnimation,
+                tabSize: AppConfig.editor.tabSize,
+                fontLigatures: AppConfig.editor.fontLigatures,
+            })
         }
-
-        editors.forEach(editor => {
-            if (editor && typeof editor.updateOptions === 'function') {
-                try {
-                    updateFn(editor)
-                } catch (error) {
-                    console.warn('Error updating editor:', error)
-                }
-            }
-        })
-    }
-
-    lineNumbersSelect.addEventListener("change", (e) => {
-        const value = e.target.value
-        console.log("Line numbers set to: ", value)
-        setConfig('editor.lineNumbers', value)
-        updateAllEditors(editor => editor.updateOptions({ lineNumbers: value }))
-        saveConfig()
-    })
-
-    wordWrapSelect.addEventListener("change", (e) => {
-        const value = e.target.value
-        setConfig('editor.wordWrap', value)
-        updateAllEditors(editor => editor.updateOptions({ wordWrap: value }))
-        saveConfig()
-    })
-
-    fontSizeInput.addEventListener("change", (e) => {
-        const value = parseInt(e.target.value, 10)
-        setConfig('editor.fontSize', value)
-        updateAllEditors(editor => editor.updateOptions({ fontSize: value }))
-        saveConfig()
-    })
-
-    showMinimap.addEventListener("change", (e) => {
-        const value = e.target.checked
-        setConfig('editor.minimap', value)
-        updateAllEditors(editor => editor.updateOptions({ minimap: { enabled: value } }))
-        saveConfig()
     })
 }
 
+function renderOptionsTab(tabName, container) {
+    container.innerHTML = ""
+
+    switch (tabName) {
+        case "general":
+            container.appendChild(createGeneralTab())
+            break
+        case "editor":
+            container.appendChild(createEditorTab())
+            break
+        case "audio":
+            container.appendChild(createAudioTab())
+            break
+        default:
+            container.textContent = "No content available."
+            break
+    }
+}
+
+function createEditorTab() {
+    const wrapper = document.createElement("div")
+    wrapper.className = "editor-options"
+
+    wrapper.innerHTML = `
+        <div class="option-row">
+            <label>Line Numbers</label>
+            <select id="line-numbers-select">
+                <option value="on">On</option>       
+                <option value="off" >Off</option>       
+                <option value="relative">Relative</option>       
+                <option value="interval">Interval</option>       
+            </select>
+        </div>
+
+        <div class="option-row">
+            <label>Word Wrap</label>
+            <select id="word-wrap-select">
+                <option value="on">On</option>       
+                <option value="off">Off</option>       
+            </select>
+        </div>
+
+        <div class="option-row">
+            <label>Font Size</label>
+            <input type="number" id="font-size-input">
+        </div>
+
+        <div class="option-row">
+            <label>Tab Size</label>
+            <input type="number" id="tab-size-input">
+        </div>
+
+        <div class="option-row">
+            <label>Show Minimap</label>
+            <input type="checkbox" id="show-minimap">
+        </div>
+
+        <div class="option-row">
+            <label>Enable Font Ligatures</label>
+            <input type="checkbox" id="enable-font-ligatures">
+        </div>
+
+        <div class="option-row">
+            <label>Cursor Blinking</label>
+            <select id="cursor-blinking-select">
+                <option value="blink">Blink</option>       
+                <option value="smooth">Smooth</option>       
+                <option value="phase">Phase</option>       
+                <option value="expand">Expand</option>       
+                <option value="solid">Solid</option>       
+            </select>
+        </div>
+
+        <div class="option-row">
+            <label>Cursor Smooth Caret Animation</label>
+            <select id="cursor-caret-select">
+                <option value="on">On</option>       
+                <option value="explicit">Explicit</option>       
+                <option value="off">Off</option>       
+            </select>
+        </div>
+    `
+    //Asignar los valores de tempConfig a los elementos
+    wrapper.querySelector("#line-numbers-select").value = tempConfig.editor.lineNumbers
+    wrapper.querySelector("#word-wrap-select").value = tempConfig.editor.wordWrap
+    wrapper.querySelector("#font-size-input").value = tempConfig.editor.fontSize
+    wrapper.querySelector("#tab-size-input").value = tempConfig.editor.tabSize ?? 4
+    wrapper.querySelector("#show-minimap").checked = tempConfig.editor.minimap
+    wrapper.querySelector("#enable-font-ligatures").checked = tempConfig.editor.fontLigatures
+    wrapper.querySelector("#cursor-blinking-select").value = tempConfig.editor.cursorBlinking ?? "blink"
+    wrapper.querySelector("#cursor-caret-select").value = tempConfig.editor.cursorSmoothCaretAnimation ?? "on"
+
+    //Enlazar los eventos que actualizan tempConfig en vivo
+    wrapper.querySelector("#line-numbers-select").addEventListener("change", e => tempConfig.editor.lineNumbers = e.target.value)
+    wrapper.querySelector("#word-wrap-select").addEventListener("change", e => tempConfig.editor.wordWrap = e.target.value)
+    wrapper.querySelector("#font-size-input").addEventListener("input", e => tempConfig.editor.fontSize = parseInt(e.target.value))
+    wrapper.querySelector("#tab-size-input").addEventListener("input", e => tempConfig.editor.tabSize = parseInt(e.target.value))
+    wrapper.querySelector("#show-minimap").addEventListener("change", e => tempConfig.editor.minimap = e.target.checked)
+    wrapper.querySelector("#enable-font-ligatures").addEventListener("change", e => tempConfig.editor.fontLigatures = e.target.checked)
+    wrapper.querySelector("#cursor-blinking-select").addEventListener("change", e => tempConfig.editor.cursorBlinking = e.target.value)
+    wrapper.querySelector("#cursor-caret-select").addEventListener("change", e => tempConfig.editor.cursorSmoothCaretAnimation = e.target.value)
+
+    return wrapper
+}
+
+function createGeneralTab() {
+    const wrapper = document.createElement("div")
+    wrapper.className = "general-options"
+
+    wrapper.innerHTML = `
+        <div class="option-row">
+            <label>Language</label>
+            <select id="lang-select">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+        </div>
+
+        <div class="option-row">
+            <label>Theme</label>
+            <select id="theme-select">
+                <option value="steamClassic">Steam Classic</option>
+            </select>
+        </div>
+    `
+
+    wrapper.querySelector("#lang-select").value = tempConfig.language || "en"
+    wrapper.querySelector("#theme-select").value = tempConfig.editor.theme || "steamClassic"
+
+    wrapper.querySelector("#lang-select").addEventListener("change", e => tempConfig.language = e.target.value)
+    wrapper.querySelector("#theme-select").addEventListener("change", e => tempConfig.editor.theme = e.target.value)
+
+    return wrapper
+}

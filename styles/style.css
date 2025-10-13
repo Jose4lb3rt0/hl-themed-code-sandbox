@@ -834,6 +834,7 @@ button:active {
   background: #4c5844;
 }
 
+.general-options,
 .editor-options {
   display: flex;
   flex-direction: column;
@@ -849,6 +850,7 @@ button:active {
 }
 
 .option-row label {
+  font-weight: normal;
   flex: 0 0 110px;
   text-align: right;
   color: #ffffff;

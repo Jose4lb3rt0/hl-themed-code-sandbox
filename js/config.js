@@ -6,7 +6,11 @@ export const AppConfig = {
         wordWrap: 'off',
         fontSize: 14,
         minimap: true,
-        theme: 'steamClassic'
+        theme: 'steamClassic',
+        fontLigatures: true,
+        cursorBlinking: 'blink',
+        cursorSmoothCaretAnimation: 'on',
+        tabSize: 4
     },
     otherSettings: {}
 }

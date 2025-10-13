@@ -105,9 +105,9 @@ const editors = {
     },
 }
 
-window.editorsReady = new Promise((resolve) => {
-    window.resolveEditorsReady = resolve
-})
+// window.editorsReady = new Promise((resolve) => {
+//     window.resolveEditorsReady = resolve
+// })
 
 document.addEventListener('DOMContentLoaded', () => {
     ["htmlEditor", "cssEditor", "jsEditor", "output"].forEach((id) => {
@@ -126,17 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.htmlEditor = monaco.editor.create(document.getElementById('html-editor'), {
                     value: '<h1>Hello, world!</h1>',
                     language: 'html',
-                    // theme: 'vs-dark',
-                    // automaticLayout: true,
-                    // minimap: { enabled: false },
-                    // theme: 'steamClassic',
-                    // lineNumbers: 'off',
                     theme: AppConfig.editor.theme,
                     automaticLayout: true,
                     lineNumbers: AppConfig.editor.lineNumbers,
                     wordWrap: AppConfig.editor.wordWrap,
                     minimap: { enabled: AppConfig.editor.minimap },
-                    fontSize: AppConfig.editor.fontSize
+                    fontSize: AppConfig.editor.fontSize,
+                    fontLigatures: AppConfig.editor.fontLigatures,
+                    cursorBlinking: AppConfig.editor.cursorBlinking,
+                    cursorSmoothCaretAnimation: AppConfig.editor.cursorSmoothCaretAnimation,
+                    tabSize: AppConfig.editor.tabSize,
                 })
 
                 window.cssEditor = monaco.editor.create(document.getElementById('css-editor'), {
@@ -248,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
 
                 updateOutput()
-                window.resolveEditorsReady()
+                // window.resolveEditorsReady()
             })
     })
 })
