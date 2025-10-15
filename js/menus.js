@@ -94,8 +94,9 @@ export function createMenu(menuData) {
     let existingMenu = document.getElementById(menuData.id)
 
     if (existingMenu) {
-        zIndexCounter++
-        existingMenu.style.zIndex = zIndexCounter
+        traerAlFrente(existingMenu)
+        // zIndexCounter++
+        // existingMenu.style.zIndex = zIndexCounter
         return
     }
 
@@ -104,39 +105,56 @@ export function createMenu(menuData) {
     menu.id = menuData.id
     menu.classList.add(menuData.id)
     menu.style.position = "absolute"
+    menu.dataset.layer = menuData.layer || "default"
 
-    //logica del layer
-    const isOverlayMenu = menuData.layer === "overlay"
-    const baseZ = isOverlayMenu ? 10000 : 1000 //el menu de pausa esta en 5000 y los flotantes en 1000, pero aqui se usa 10000 para que siempre esten encima
+    //--- Z-INDEX REGLAS ---//
+    const layer_base = {
+        editor: 1000,
+        pause: 5000,
+        overlay: 10000,
+    }
+
+    const layer_limit = {
+        editor: 4999,
+        pause: 9999,
+        overlay: Infinity
+    }
+
+    const layer = menu.dataset.layer
+    const baseZ = layer_base[layer]
+    const limitZ = layer_limit[layer]
+
     zIndexCounter = Math.max(zIndexCounter, baseZ)
-    menu.style.zIndex = zIndexCounter
+    menu.style.zIndex = Math.min(zIndexCounter, limitZ)
+    //----------------------//
 
-    //contenedor segun tipo
-    const parent = isOverlayMenu
-        ? document.body  //se muestra por encima del overlay
-        : document.querySelector("main") || document.body //menús de editor van debajo
+    //--- CONTENEDOR ---//
+    const parent = layer === "overlay"
+        ? document.body  //APPEND: se muestra por encima del overlay
+        : document.querySelector("main") || document.body //APPEND: menús de editor van debajo
+
     parent.appendChild(menu)
+    //------------------//
 
-    //tamaño
+    
+    //--- TAMAÑO Y POSICIÓN ---//
     const startW = menuData.spawnWidth || menuData.minWidth || 300
     const startH = menuData.spawnHeight || menuData.minHeight || 200
     menu.style.width = `${startW}px`
     menu.style.height = `${startH}px`
-
-    //posición
+    
     if (menuData.x != null && menuData.y != null) {
+        //posición
         menu.style.left = menuData.x + "px"
         menu.style.top = menuData.y + "px"
         menu.style.transform = "none"
     } else {
-        //centro
+        //centro automatico
         menu.style.left = "50%"
         menu.style.top = "50%"
         menu.style.transform = "translate(-50%, -50%)"
     }
-
-    menu.style.zIndex = ++zIndexCounter
-    const hasMultipleButtons = menuData.class !== ("" || null) ? true : false
+    //-------------------------//
 
     let headerHTML = `
         <div class="menu-header">
@@ -152,12 +170,15 @@ export function createMenu(menuData) {
                 </div>
         </div>
     `
-
+    
     menu.innerHTML = `
-        ${headerHTML}
-        <div class="menu-content">${menuData.content}</div>
+    ${headerHTML}
+    <div class="menu-content">${menuData.content}</div>
     `
+    document.body.appendChild(menu)
+    openMenus.push(menu)
 
+    //--- RESIZABLES ---//
     if (menuData.resizable) {
         const sides = [
             "top", "right", "bottom", "left",
@@ -171,19 +192,16 @@ export function createMenu(menuData) {
         })
     }
 
-    document.body.appendChild(menu)
-
-    //Parte del resizable
     const rect = menu.getBoundingClientRect()
     menu.style.top = rect.top + "px"
     menu.style.left = rect.left + "px"
     menu.style.transform = ""
-
-    openMenus.push(menu)
+    //------------------//
 
     menu.addEventListener("mousedown", () => {
-        zIndexCounter++
-        menu.style.zIndex = zIndexCounter
+        traerAlFrente(menu)
+        // zIndexCounter++
+        // menu.style.zIndex = zIndexCounter
     })
 
     if (menuData.id !== "loading-bar") {
@@ -542,4 +560,19 @@ function createGeneralTab() {
     wrapper.querySelector("#theme-select").addEventListener("change", e => tempConfig.editor.theme = e.target.value)
 
     return wrapper
+}
+
+function traerAlFrente(menu) {
+    const layer = menu.dataset.layer
+    const layer_base = { editor: 1000, pause: 5000, overlay: 10000 }
+    const layer_limit = { editor: 4999, pause: 9999, overlay: Infinity }
+
+    //no trae editors frente a los overlays
+    if (layer === "editor") {
+        const overlayOpen = openMenus.some(m => m.dataset.layer === "overlay")
+        if (overlayOpen) return 
+    }
+
+    zIndexCounter = Math.min(Math.max(zIndexCounter + 1, layer_base[layer]), layer_limit[layer])
+    menu.style.zIndex = zIndexCounter
 }
