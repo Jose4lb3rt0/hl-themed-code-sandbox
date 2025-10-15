@@ -329,7 +329,7 @@ function newCode(mode) {
     }
 }
 
-function closeMenu(menu) {
+export function closeMenu(menu) {
     playSound(sounds.close)
     menu.remove()
     openMenus = openMenus.filter((m) => m !== menu)
@@ -565,7 +565,7 @@ function createGeneralTab() {
 function traerAlFrente(menu) {
     const layer = menu.dataset.layer
     const layer_base = { editor: 1000, pause: 5000, overlay: 10000 }
-    const layer_limit = { editor: 4999, pause: 9999, overlay: Infinity }
+    const layer_limite = { editor: 4999, pause: 9999, overlay: Infinity }
 
     //no trae editors frente a los overlays
     if (layer === "editor") {
@@ -573,6 +573,32 @@ function traerAlFrente(menu) {
         if (overlayOpen) return 
     }
 
-    zIndexCounter = Math.min(Math.max(zIndexCounter + 1, layer_base[layer]), layer_limit[layer])
+    const menusEnLayer = openMenus.filter(m => m.dataset.layer === layer)
+    const maxZIndexEnLayer = Math.max(...menusEnLayer.map(m => parseInt(m.style.zIndex) || layer_base[layer]))
+
+    //Precaución cuando está cerca del limite
+    if (maxZIndexEnLayer >= layer_limite[layer] - 10) { 
+        resetearIndices(layer, menusEnLayer, menu)
+        return
+    }
+
+    zIndexCounter = Math.min(Math.max(zIndexCounter + 1, layer_base[layer]), layer_limite[layer])
     menu.style.zIndex = zIndexCounter
+}
+
+function resetearIndices(layer, menusEnLayer, menuToFront) {
+    const layer_base = { editor: 1000, pause: 5000, overlay: 10000 }
+
+    const sortedMenus = menusEnLayer
+        .filter(m => m !== menuToFront)
+        .sort((a, b) => parseInt(a.style.zIndex) - parseInt(b.style.zIndex))
+
+    let newZIndex = layer_base[layer]
+    sortedMenus.forEach(m => {
+        m.style.zIndex = newZIndex
+        newZIndex++
+    })
+
+    menuToFront.style.zIndex = newZIndex
+    zIndexCounter = newZIndex
 }
