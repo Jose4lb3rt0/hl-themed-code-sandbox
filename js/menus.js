@@ -136,13 +136,13 @@ export function createMenu(menuData) {
     parent.appendChild(menu)
     //------------------//
 
-    
+
     //--- TAMAÑO Y POSICIÓN ---//
     const startW = menuData.spawnWidth || menuData.minWidth || 300
     const startH = menuData.spawnHeight || menuData.minHeight || 200
     menu.style.width = `${startW}px`
     menu.style.height = `${startH}px`
-    
+
     if (menuData.x != null && menuData.y != null) {
         //posición
         menu.style.left = menuData.x + "px"
@@ -170,7 +170,7 @@ export function createMenu(menuData) {
                 </div>
         </div>
     `
-    
+
     menu.innerHTML = `
     ${headerHTML}
     <div class="menu-content">${menuData.content}</div>
@@ -333,6 +333,43 @@ export function closeMenu(menu) {
     playSound(sounds.close)
     menu.remove()
     openMenus = openMenus.filter((m) => m !== menu)
+}
+
+export function getOverlayMenus() {
+    return openMenus.filter(menu => menu.dataset.layer === "overlay")
+}
+
+//LIFO para menus --> ESC
+export function closeTopOverlayMenu() {
+    const overlayMenus = getOverlayMenus()
+    if (overlayMenus.length === 0) return false
+
+    const topMenu = overlayMenus.reduce((max, menu) => {
+        const maxZ = parseInt(max.style.zIndex) || 0
+        const menuZ = parseInt(menu.style.zIndex) || 0
+        return menuZ > maxZ ? menu : max
+    })
+
+    closeMenu(topMenu)
+    return true
+}
+
+//Ocultar todos los menús overlay 
+export function hideOverlayMenus() {
+    openMenus.forEach(menu => {
+        if (menu.dataset.layer === "overlay") {
+            menu.style.display = "none"
+        }
+    })
+}
+
+//Al salir del pause, mostrar los menus overlay
+export function showOverlayMenus() {
+    openMenus.forEach(menu => {
+        if (menu.dataset.layer === "overlay") {
+            menu.style.display = "flex"
+        }
+    })
 }
 
 function makeResizable(menu, resizer, lado, menuData) {
@@ -570,14 +607,14 @@ function traerAlFrente(menu) {
     //no trae editors frente a los overlays
     if (layer === "editor") {
         const overlayOpen = openMenus.some(m => m.dataset.layer === "overlay")
-        if (overlayOpen) return 
+        if (overlayOpen) return
     }
 
     const menusEnLayer = openMenus.filter(m => m.dataset.layer === layer)
     const maxZIndexEnLayer = Math.max(...menusEnLayer.map(m => parseInt(m.style.zIndex) || layer_base[layer]))
 
     //Precaución cuando está cerca del limite
-    if (maxZIndexEnLayer >= layer_limite[layer] - 10) { 
+    if (maxZIndexEnLayer >= layer_limite[layer] - 10) {
         resetearIndices(layer, menusEnLayer, menu)
         return
     }
