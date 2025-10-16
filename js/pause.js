@@ -24,13 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 togglePauseMenu(false)
             }
-            playSound(sounds.cancel)
             return
         }
 
         if (!isPaused) {
             togglePauseMenu(true)
-            playSound(sounds.option)
         }
     }
 

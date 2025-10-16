@@ -1,4 +1,4 @@
-import { sounds, playSequence, playSound } from "./sounds.js"
+import { sounds, playSound, updateMusicVolume } from "./sounds.js"
 import { showLoadingBar } from "./loading.js"
 import { AppConfig, setConfig } from "./config.js"
 
@@ -270,7 +270,7 @@ export function createMenu(menuData) {
     const resetBtn = menu.querySelector("#reset-btn")
     if (resetBtn) {
         resetBtn.addEventListener("click", () => {
-            playSound(sounds.click_release, 0.5)
+            playSound(sounds.click_release)
             menu.style.width = originalWidth + "px"
             menu.style.height = originalHeight + "px"
         })
@@ -447,6 +447,7 @@ function applyTempConfig() {
     Object.assign(AppConfig, structuredClone(tempConfig))
     saveConfig()
 
+    //Editor
     const editors = [window.htmlEditor, window.cssEditor, window.jsEditor]
     editors.forEach(editor => {
         if (editor && editor.updateOptions) {
@@ -462,6 +463,9 @@ function applyTempConfig() {
             })
         }
     })
+
+    //Audio
+    updateMusicVolume(AppConfig.audio.musicVolume)
 }
 
 function renderOptionsTab(tabName, container) {
@@ -595,6 +599,58 @@ function createGeneralTab() {
 
     wrapper.querySelector("#lang-select").addEventListener("change", e => tempConfig.language = e.target.value)
     wrapper.querySelector("#theme-select").addEventListener("change", e => tempConfig.editor.theme = e.target.value)
+
+    return wrapper
+}
+
+function createAudioTab() {
+    const wrapper = document.createElement("div")
+    wrapper.classList = "audio-options"
+
+    wrapper.innerHTML = `
+        <div class="option-column">
+            <label>Sounds effects volume</label>
+            <div class="range-container">
+                <input type="range" class="slider" id="sfxRange" min="0" max="100">
+                <div class="ticks"></div>
+            </div>
+        </div>
+
+        <div class="option-column">
+            <label>MP3 volume</label>
+            <div class="range-container">
+                <input type="range" class="slider" id="musicRange" min="0" max="100">
+                <div class="ticks"></div>
+            </div>
+        </div>
+    `
+
+    const vRange = wrapper.querySelector("#sfxRange")
+    const mRange = wrapper.querySelector("#musicRange")
+
+    vRange.value = Math.round((tempConfig.audio.sfxVolume ?? 0.5) * 100)
+    mRange.value = Math.round((tempConfig.audio.musicVolume ?? 0.1) * 100)
+
+    const ticksContainers = wrapper.querySelectorAll(".ticks")
+    ticksContainers.forEach((tc) => {
+        for (let i = 0; i < 11; i++) {
+            const tick = document.createElement("div")
+            tick.className = "tick"
+            tc.appendChild(tick)
+        }
+    })
+
+    vRange.addEventListener("input", e => {
+        const value = e.target.value / 100
+        tempConfig.audio.sfxVolume = value
+        // playSound(sounds.option, value) 
+    })
+
+    mRange.addEventListener("input", e => {
+        const value = e.target.value / 100
+        tempConfig.audio.musicVolume = value
+        // updateMusicVolume(value)
+    })
 
     return wrapper
 }

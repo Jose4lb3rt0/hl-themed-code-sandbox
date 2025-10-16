@@ -1,6 +1,9 @@
 export const AppConfig = {
     language: 'en',
-    audioVolume: 0.5,
+    audio: {
+        sfxVolume: 0.5,
+        musicVolume: 0.1,
+    },
     editor: {
         lineNumbers: 'off',
         wordWrap: 'off',

@@ -1,4 +1,4 @@
-import { playSound, sounds } from './sounds.js'
+import { playMusic, playSound, sounds } from './sounds.js'
 
 export function startValveIntro() {
     document.body.classList.add('intro-active')
@@ -48,7 +48,7 @@ export function startCodeIntro() {
 
     if (overlay && logo) {
         logo.classList.add('show')
-        playSound(sounds.s02, 0.1)
+        playMusic(sounds.s02)
 
         setTimeout(() => {
             blackScreen.classList.add("hide")
