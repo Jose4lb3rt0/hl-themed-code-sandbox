@@ -34,13 +34,13 @@
       <div class="main-menu">
         <table class="menu-table">
           <tr>
-            <td class="option" id="resume-btn">Resume code</td>
+            <td class="option" id="resume-btn" data-i18n="resume">Resume code</td>
           </tr>
           <tr>
-            <td class="option" id="options-btn" data-menu="options">Options</td>
+            <td class="option" id="options-btn" data-menu="options" data-i18n="options">Options</td>
           </tr>
           <tr>
-            <td class="option" id="exit-btn">Leave code</td>
+            <td class="option" id="exit-btn" data-i18n="exit">Leave code</td>
           </tr>
         </table>
       </div>
@@ -49,8 +49,10 @@
     <script type="module" src="js/intro.js"></script>
     <script type="module">
       import { startCodeIntro } from "./js/intro.js"
+      import { applyT } from "./js/language.js"
       document.addEventListener("DOMContentLoaded", () => {
         startCodeIntro()
+        applyT()
       })
     </script>
     <script type="module" src="js/sounds.js"></script>

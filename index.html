@@ -47,12 +47,12 @@
         <div class="main-menu">
           <table class="menu-table">
             <tr>
-              <td class="option" data-menu="new">New code</td>
-              <td class="desc">Create a new code file.</td>
+              <td class="option" data-menu="new" data-i18n="newcode">New code</td>
+              <td class="desc" data-i18n="newcodeDesc">Create a new code file.</td>
             </tr>
             <tr>
-              <td class="option" data-menu="options">Options</td>
-              <td class="desc">Change settings.</td>
+              <td class="option" data-menu="options" data-i18n="options">Options</td>
+              <td class="desc" data-i18n="optionsDesc">Change settings.</td>
             </tr>
             <!-- <tr>
                         <td class="option" data-menu="load">Load code</td>
@@ -66,9 +66,10 @@
     <script type="module" src="js/intro.js"></script>
     <script type="module">
       import { startValveIntro } from "./js/intro.js"
-      
+      import { t, applyT } from "./js/language.js"
       document.addEventListener("DOMContentLoaded", () => {
         startValveIntro()
+        applyT() //para el html que tenemos aqui
       })
     </script>
     <script type="module" src="js/loading.js"></script>

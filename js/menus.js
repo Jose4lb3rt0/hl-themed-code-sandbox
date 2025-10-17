@@ -1,6 +1,7 @@
 import { sounds, playSound, updateMusicVolume } from "./sounds.js"
 import { showLoadingBar } from "./loading.js"
-import { AppConfig, setConfig } from "./config.js"
+import { AppConfig, saveConfig, setConfig } from "./config.js"
+import { applyT } from "./language.js"
 
 let openMenus = []
 let zIndexCounter = 1000 //contador de menus en 1000 con respecto al css
@@ -439,13 +440,12 @@ function makeResizable(menu, resizer, lado, menuData) {
     })
 }
 
-function saveConfig() {
-    localStorage.setItem('appConfig', JSON.stringify(AppConfig))
-}
-
 function applyTempConfig() {
     Object.assign(AppConfig, structuredClone(tempConfig))
     saveConfig()
+
+    //General
+    applyT()
 
     //Editor
     const editors = [window.htmlEditor, window.cssEditor, window.jsEditor]
@@ -493,60 +493,60 @@ function createEditorTab() {
 
     wrapper.innerHTML = `
         <div class="option-row">
-            <label>Line Numbers</label>
+            <label data-i18n="lineNumbers">Line Numbers</label>
             <select id="line-numbers-select">
-                <option value="on">On</option>       
-                <option value="off" >Off</option>       
-                <option value="relative">Relative</option>       
-                <option value="interval">Interval</option>       
+                <option data-i18n="on" value="on">On</option>       
+                <option data-i18n="off" value="off" >Off</option>       
+                <option data-i18n="relative" value="relative">Relative</option>       
+                <option data-i18n="interval" value="interval">Interval</option>       
             </select>
         </div>
 
         <div class="option-row">
-            <label>Word Wrap</label>
+            <label data-i18n="wordWrap">Word Wrap</label>
             <select id="word-wrap-select">
-                <option value="on">On</option>       
-                <option value="off">Off</option>       
+                <option data-i18n="on" value="on">On</option>       
+                <option data-i18n="off" value="off">Off</option>       
             </select>
         </div>
 
         <div class="option-row">
-            <label>Font Size</label>
+            <label data-i18n="fontSize">Font Size</label>
             <input type="number" id="font-size-input">
         </div>
 
         <div class="option-row">
-            <label>Tab Size</label>
+            <label data-i18n="tabSize">Tab Size</label>
             <input type="number" id="tab-size-input">
         </div>
 
         <div class="option-row">
-            <label>Show Minimap</label>
+            <label data-i18n="showMinimap">Show Minimap</label>
             <input type="checkbox" id="show-minimap">
         </div>
 
         <div class="option-row">
-            <label>Enable Font Ligatures</label>
+            <label data-i18n="efLigatures">Enable Font Ligatures</label>
             <input type="checkbox" id="enable-font-ligatures">
         </div>
 
         <div class="option-row">
-            <label>Cursor Blinking</label>
+            <label data-i18n="cBlinking">Cursor Blinking</label>
             <select id="cursor-blinking-select">
-                <option value="blink">Blink</option>       
-                <option value="smooth">Smooth</option>       
-                <option value="phase">Phase</option>       
-                <option value="expand">Expand</option>       
-                <option value="solid">Solid</option>       
+                <option data-i18n="blink" value="blink">Blink</option>       
+                <option data-i18n="smooth" value="smooth">Smooth</option>       
+                <option data-i18n="phase" value="phase">Phase</option>       
+                <option data-i18n="expand" value="expand">Expand</option>       
+                <option data-i18n="solid" value="solid">Solid</option>       
             </select>
         </div>
 
         <div class="option-row">
-            <label>Cursor Smooth Caret Animation</label>
+            <label data-i18n="cscAnimation">Cursor Smooth Caret Animation</label>
             <select id="cursor-caret-select">
-                <option value="on">On</option>       
-                <option value="explicit">Explicit</option>       
-                <option value="off">Off</option>       
+                <option data-i18n="on" value="on">On</option>       
+                <option data-i18n="explicit" value="explicit">Explicit</option>       
+                <option data-i18n="off" value="off">Off</option>       
             </select>
         </div>
     `
@@ -570,6 +570,7 @@ function createEditorTab() {
     wrapper.querySelector("#cursor-blinking-select").addEventListener("change", e => tempConfig.editor.cursorBlinking = e.target.value)
     wrapper.querySelector("#cursor-caret-select").addEventListener("change", e => tempConfig.editor.cursorSmoothCaretAnimation = e.target.value)
 
+    applyT(wrapper)
     return wrapper
 }
 
@@ -579,15 +580,15 @@ function createGeneralTab() {
 
     wrapper.innerHTML = `
         <div class="option-row">
-            <label>Language</label>
+            <label data-i18n="language">Language</label>
             <select id="lang-select">
-                <option value="en">English</option>
-                <option value="es">Español</option>
+                <option value="en" data-i18n="en">English</option>
+                <option value="es" data-i18n="es">Español</option>
             </select>
         </div>
 
         <div class="option-row">
-            <label>Theme</label>
+            <label data-i18n="theme">Theme</label>
             <select id="theme-select">
                 <option value="steamClassic">Steam Classic</option>
             </select>
@@ -600,6 +601,7 @@ function createGeneralTab() {
     wrapper.querySelector("#lang-select").addEventListener("change", e => tempConfig.language = e.target.value)
     wrapper.querySelector("#theme-select").addEventListener("change", e => tempConfig.editor.theme = e.target.value)
 
+    applyT(wrapper)
     return wrapper
 }
 
@@ -609,7 +611,7 @@ function createAudioTab() {
 
     wrapper.innerHTML = `
         <div class="option-column">
-            <label>Sounds effects volume</label>
+            <label data-i18n="sfxVolume">Sounds effects volume</label>
             <div class="range-container">
                 <input type="range" class="slider" id="sfxRange" min="0" max="100">
                 <div class="ticks"></div>
@@ -617,7 +619,7 @@ function createAudioTab() {
         </div>
 
         <div class="option-column">
-            <label>MP3 volume</label>
+            <label data-i18n="musicVolume">MP3 volume</label>
             <div class="range-container">
                 <input type="range" class="slider" id="musicRange" min="0" max="100">
                 <div class="ticks"></div>
@@ -652,6 +654,7 @@ function createAudioTab() {
         // updateMusicVolume(value)
     })
 
+    applyT(wrapper)
     return wrapper
 }
 
