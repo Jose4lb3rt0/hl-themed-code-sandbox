@@ -2,6 +2,10 @@ import { AppConfig } from "./config.js"
 
 export const translations = {
     en: {
+        "loading...": "Loading...",
+        startingNewCode: "Starting new code ...",
+        loadingProgress: "Loading...",
+
         resume: "Resume code",
         newcode: "New code",
         newcodeDesc: "Create a new code file.",
@@ -44,6 +48,10 @@ export const translations = {
         off: "Off",
     },
     es: {
+        "loading...": "Cargando...",
+        startingNewCode: "Iniciando nuevo código ...",
+        loadingProgress: "Cargando...",
+
         resume: "Reanudar código",
         newcode: "Nuevo código",
         newcodeDesc: "Crea un nuevo archivo de código.",
@@ -93,11 +101,9 @@ export function t(key) {
 }
 
 export function applyT(root = document) {
-    const lang = AppConfig.language || "en"
-
     root.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n")
-        const text = translations[lang]?.[key] || translations["en"][key] || key
+        const text = t(key)
 
         if (el.tagName === "INPUT" && "placeholder" in el) {
             el.placeholder = text

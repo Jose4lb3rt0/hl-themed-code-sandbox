@@ -1,7 +1,7 @@
 import { sounds, playSound, updateMusicVolume } from "./sounds.js"
 import { showLoadingBar } from "./loading.js"
 import { AppConfig, saveConfig, setConfig } from "./config.js"
-import { applyT } from "./language.js"
+import { applyT, t } from "./language.js"
 
 let openMenus = []
 let zIndexCounter = 1000 //contador de menus en 1000 con respecto al css
@@ -9,19 +9,19 @@ let zIndexCounter = 1000 //contador de menus en 1000 con respecto al css
 export const menus = {
     new: {
         id: "menu-new",
-        title: "New Code",
+        title: "newcode",
         resizable: false,
         minWidth: 300,
         minHeight: 135,
         layer: "overlay",
         content: `
             <button class="contentBtn" id="btn-new-code">HTML + CSS + JavaScript</button>
-            <button class="contentBtn vital-menu-button" style="margin-top: 7%; align-self: end;">Cancel</button>
+            <button class="contentBtn vital-menu-button" data-i18n="cancel" style="margin-top: 7%; align-self: end;">Cancel</button>
         `,
     },
     load: {
         id: "menu-load",
-        title: "Load Code",
+        title: "loadcode",
         resizable: false,
         minWidth: 300,
         layer: "overlay",
@@ -33,7 +33,7 @@ export const menus = {
     },
     options: {
         id: "menu-options",
-        title: "Options",
+        title: "options",
         resizable: false,
         minWidth: 500,
         minHeight: 400,
@@ -41,23 +41,23 @@ export const menus = {
         content: `
             <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
                 <div class="tab-container">
-                    <button class="contentBtn vital-menu-button tab" data-tab="general">General</button>
-                    <button class="contentBtn vital-menu-button tab" data-tab="editor">Editor</button>
-                    <button class="contentBtn vital-menu-button tab" data-tab="audio">Audio</button>
+                    <button class="contentBtn vital-menu-button tab" data-i18n="general" data-tab="general">General</button>
+                    <button class="contentBtn vital-menu-button tab" data-i18n="editor" data-tab="editor">Editor</button>
+                    <button class="contentBtn vital-menu-button tab" data-i18n="audio" data-tab="audio">Audio</button>
                 </div>
                 <div class="options-content">
                 </div>
                 <div style="width: 100%; display: flex; justify-content: flex-end; padding: 0.2rem 0; gap: 0.4rem;">
-                    <button id="btn-accept-config" class="contentBtn vital-menu-button" data-tab="editor">Aceptar</button>
-                    <button id="btn-cancel-config" class="contentBtn vital-menu-button" data-tab="editor">Cancelar</button>
-                    <button id="btn-apply-config" class="contentBtn vital-menu-button" data-tab="audio">Aplicar</button>
+                    <button id="btn-accept-config" class="contentBtn vital-menu-button" data-tab="editor" data-i18n="accept">Aceptar</button>
+                    <button id="btn-cancel-config" class="contentBtn vital-menu-button" data-tab="editor" data-i18n="cancel">Cancelar</button>
+                    <button id="btn-apply-config" class="contentBtn vital-menu-button" data-tab="audio" data-i18n="apply">Aplicar</button>
                 </div>
             </div>
         `
     },
     loading: {
         id: "loading-bar",
-        title: "Loading...",
+        title: "loading...",
         minWidth: 380,
         minHeight: 110,
         resizable: false,
@@ -69,7 +69,7 @@ export const menus = {
                     <div id="bar-bg" style="width:100%; background: #3e4737; overflow:hidden; height: 28px; padding: 4px; box-sizing: border-box; display: flex; gap: 2px">
                         <div id="progress-bar" style="width:0%; height:100%; background:#0f0; transition:width 0.3s"></div>
                     </div>
-                    <button class="contentBtn vital-menu-button cancel" style="align-self: end">Cancel</button>
+                    <button class="contentBtn vital-menu-button cancel" style="align-self: end" data-i18n="cancel">Cancel</button>
                 </div>
             </div>
         `,
@@ -159,9 +159,9 @@ export function createMenu(menuData) {
 
     let headerHTML = `
         <div class="menu-header">
-            <span>
+            <span> 
                 <img src="${menuData.icon ? menuData.icon : 'assets/icons/steam.svg'}" class="lang-logo">
-                ${menuData.title}
+                <span class="menu-title-text" data-i18n="${menuData.title}">${t(menuData.title)}</span>
             </span>
             <div class="header-buttons">
                 ${menuData.extraButtons ? menuData.extraButtons.map(btn =>
@@ -176,6 +176,7 @@ export function createMenu(menuData) {
     ${headerHTML}
     <div class="menu-content">${menuData.content}</div>
     `
+    applyT(menu)
     document.body.appendChild(menu)
     openMenus.push(menu)
 
@@ -323,7 +324,7 @@ export function createMenu(menuData) {
 function newCode(mode) {
     switch (mode) {
         case "html-css-js":
-            showLoadingBar("editor.html", "Starting new code ...")
+            showLoadingBar("editor.html", t("startingNewCode"))
             break
         default:
             break

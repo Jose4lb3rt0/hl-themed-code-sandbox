@@ -23,7 +23,7 @@ export function showLoadingBar(nextPage, description) {
             blocks[progress].classList.add("active")
             progress++
 
-            loadingText.textContent = description ? description : "Loading..." + Math.round((progress / totalBlocks) * 100) + "%"
+            loadingText.textContent = description || `${t("loadingProgress")} ${Math.round((progress / totalBlocks) * 100) + "%"}`
         } else {
             clearInterval(window.loadingInterval)
             window.loadingInterval = null
