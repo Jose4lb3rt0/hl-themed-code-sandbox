@@ -127,10 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 monaco.editor.defineTheme('steamClassic', monacoTheme)
                 monaco.editor.setTheme('steamClassic')
 
-                window.htmlEditor = monaco.editor.create(document.getElementById('html-editor'), {
-                    value: '<h1>Hello, world!</h1>',
-                    language: 'html',
-                    theme: AppConfig.editor.theme,
+                const base = {
                     automaticLayout: true,
                     lineNumbers: AppConfig.editor.lineNumbers,
                     wordWrap: AppConfig.editor.wordWrap,
@@ -140,28 +137,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     cursorBlinking: AppConfig.editor.cursorBlinking,
                     cursorSmoothCaretAnimation: AppConfig.editor.cursorSmoothCaretAnimation,
                     tabSize: AppConfig.editor.tabSize,
+                }
+
+                window.htmlEditor = monaco.editor.create(document.getElementById('html-editor'), {
+                    value: '<h1>Hello, world!</h1>',
+                    language: 'html',
+                    theme: AppConfig.editor.theme,
+                    ...base
                 })
 
                 window.cssEditor = monaco.editor.create(document.getElementById('css-editor'), {
                     value: 'h1 { color: orange }',
                     language: 'css',
                     theme: AppConfig.editor.theme,
-                    automaticLayout: true,
-                    lineNumbers: AppConfig.editor.lineNumbers,
-                    wordWrap: AppConfig.editor.wordWrap,
-                    minimap: { enabled: AppConfig.editor.minimap },
-                    fontSize: AppConfig.editor.fontSize
+                    ...base
                 })
 
                 window.jsEditor = monaco.editor.create(document.getElementById('js-editor'), {
                     value: 'console.log("Hello Half-Life!")',
                     language: 'javascript',
                     theme: AppConfig.editor.theme,
-                    automaticLayout: true,
-                    lineNumbers: AppConfig.editor.lineNumbers,
-                    wordWrap: AppConfig.editor.wordWrap,
-                    minimap: { enabled: AppConfig.editor.minimap },
-                    fontSize: AppConfig.editor.fontSize
+                    ...base
                 })
 
                 const editorInstances = {

@@ -167,7 +167,7 @@ export function createMenu(menuData) {
                 ${menuData.extraButtons ? menuData.extraButtons.map(btn =>
         `<button class="header-btn" id="${btn.id}" title="${btn.title}">${btn.icon}</button>`
     ).join('') : ''}
-                    ${menuData.id !== 'loading-bar' ? `<button class="close-menu">✖</button>` : ''}
+                    ${(menuData.id !== 'loading-bar' && menuData.class !== "editor") ? `<button class="close-menu">✖</button>` : ''}
                 </div>
         </div>
     `
@@ -206,7 +206,9 @@ export function createMenu(menuData) {
         // menu.style.zIndex = zIndexCounter
     })
 
-    if (menuData.id !== "loading-bar") {
+    if (menuData.id !== "loading-bar" 
+        && menuData.class !== "editor" //puesto de primeras para desaparecer el error
+    ) {
         menu.querySelector(".close-menu").addEventListener("click", () => {
             closeMenu(menu)
         })
